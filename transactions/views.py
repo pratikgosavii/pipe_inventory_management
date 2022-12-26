@@ -252,7 +252,24 @@ def update_inward(request, inward_id ):
                     forms.save()
                     return HttpResponseRedirect(reverse('list_inward'))
 
+        else:
+        
+            instance = inward.objects.get(id = inward_id)
+            comapnyID = forms.instance.company.id
+            comapny_goods_ID = forms.instance.company_goods.id
+            goods_company_ID = forms.instance.goods_company.id
+            agent_ID = forms.instance.agent.id
 
+            context = {
+                'form': forms,
+                'comapnyID' : comapnyID,
+                'comapny_goods_ID' : comapny_goods_ID,
+                'goods_company_ID' : goods_company_ID,
+                'agent_ID' : agent_ID
+            }
+            
+
+            return render(request, 'transactions/update_inward.html', context)
 
             
 
@@ -347,6 +364,8 @@ def list_inward(request):
     return render(request, 'transactions/list_inward.html', context)
 
 
+import json
+
 @login_required(login_url='login')
 def add_outward(request):
 
@@ -392,15 +411,17 @@ def add_outward(request):
                     return redirect('list_outward')
 
                 else:
-                    messages.error(request, "Outward is more than Stock")
-                    print('Outward is more than Stock')
-                    return JsonResponse({'status' : 'done'}, safe=False)
+                 
+                    error = json.dumps({ 'error' : [{'message' : 'Outward is more than Stock'}]})
+                    print(error)
+                    return JsonResponse({'error' : error}, safe=False)
 
 
             except stock.DoesNotExist:
 
-                messages.error(request, 'no stock in inventory for outward')
-                return JsonResponse({'status' : 'done'}, safe=False)
+                error = json.dumps({ 'error' : 'no stock in inventory'})
+                print(error)
+                return JsonResponse({'error' : error}, safe=False)
 
 
 
@@ -640,6 +661,23 @@ def update_outward(request, outward_id):
         else:
            
             print(forms.errors)
+            comapnyID = forms.instance.company.id
+            comapny_goods_ID = forms.instance.company_goods.id
+            goods_company_ID = forms.instance.goods_company.id
+            agent_ID = forms.instance.agent.id
+
+                
+            context = {
+                'form':  forms,
+                'comapnyID' : comapnyID,
+                'comapny_goods_ID' : comapny_goods_ID,
+                'goods_company_ID' : goods_company_ID,
+                'agent_ID' : agent_ID
+            }
+
+            return render(request, 'transactions/update_outward.html', context)
+
+
 
     else:
 

@@ -212,11 +212,10 @@
                 //window.location.href = http + "{% url 'list_inward' %}"
 
                 if (data.status == 'done'){
-                    alert("done")
                     $('#myModal').modal('show');
                 }
 
-                else if (data.error !== undefined){
+                else {
                     var a = JSON.parse(data.error)
 
                     console.log(a)

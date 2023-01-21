@@ -408,7 +408,8 @@ def add_outward(request):
                     print('save')
                     forms.save()
 
-                    return redirect('list_outward')
+                    return JsonResponse({'status' : 'done'}, safe=False)
+
 
                 else:
                  
@@ -423,7 +424,7 @@ def add_outward(request):
                 print(error)
                 return JsonResponse({'error' : error}, safe=False)
 
-
+1 
 
         else:
             error = forms.errors.as_json()

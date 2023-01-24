@@ -424,7 +424,6 @@ def add_outward(request):
                 print(error)
                 return JsonResponse({'error' : error}, safe=False)
 
-1 
 
         else:
             error = forms.errors.as_json()

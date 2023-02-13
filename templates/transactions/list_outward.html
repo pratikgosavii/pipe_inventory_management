@@ -153,9 +153,9 @@
                                 <th>Total Packet</th>
 
                                 <th>Date</th>
-                                <th>Transport</th>
+                                {% comment %} <th>Transport</th>
                                 <th>LR NO</th>
-                                <th>Frieght</th>
+                                <th>Frieght</th> {% endcomment %}
 
                                 <th>Actions</th>
                                 
@@ -174,9 +174,9 @@
                                 <td>{{ i.bags }}</td>
 
                                 <td style="min-width:128px;">{{ i.DC_date|date:"d M, Y" }}</td>
-                                <td>{{ i.transport }}</td>
+                                {% comment %} <td>{{ i.transport }}</td>
                                 <td>{{ i.LR_number }}</td>
-                                <td>{{ i.freight }}</td>
+                                <td>{{ i.freight }}</td> {% endcomment %}
 
                                 
                                 <td>  
@@ -301,7 +301,6 @@
         url = window.location.href
         url = url.split('?')[0] 
         url = url + '?year=' + $(this).val()
-        alert(url)
         location.href = url;
     })
     

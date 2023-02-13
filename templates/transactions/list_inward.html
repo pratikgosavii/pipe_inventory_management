@@ -88,13 +88,7 @@
 
                       </select>
                 </div>
-                
-                <label for="inputStatus">Name of Party</label>
-                <select id="agent" class="form-control-sm custom-select" name="agent">
-
-               
-
-                </select>
+          
                 <label for="inputStatus">Catergoy</label>
                 <select id="company_goods" class="form-control-sm custom-select" name="company_goods">
 
@@ -145,9 +139,9 @@
                                 <th>Dc Number</th>
                                 <th>Total Packet</th>
                                 <th>Date</th>
-                                <th>Transport</th>
+                                {% comment %} <th>Transport</th>
                                 <th>LR NO</th>
-                                <th>Frieght</th>
+                                <th>Frieght</th> {% endcomment %}
                                 <th>Actions</th>
                                 
                             </tr>
@@ -164,9 +158,9 @@
                                 <td>{{ i.DC_number }}</td>
                                 <td>{{ i.bags }}</td>
                                 <td style="min-width:128px;">{{ i.DC_date|date:"d M, Y" }}</td>
-                                <td>{{ i.transport }}</td>
+                                {% comment %} <td>{{ i.transport }}</td>
                                 <td>{{ i.LR_number }}</td>
-                                <td>{{ i.freight }}</td>
+                                <td>{{ i.freight }}</td> {% endcomment %}
 
                                 <td>  
                                    <a href="{% url 'update_inward' i.id %}"> <button id="payment-button"  style="background-color: green; border: green; padding: 10px;border-radius: 12px;" type="submit" class="btn-info ">
@@ -309,7 +303,6 @@
         url = window.location.href
         url = url.split('?')[0] 
         url = url + '?year=' + $(this).val()
-        alert(url)
         location.href = url;
     })
     

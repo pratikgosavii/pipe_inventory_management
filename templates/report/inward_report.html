@@ -112,16 +112,11 @@
                             <tr>
                                 <th class="serial">#</th>
                                 <th>DC Number</th>
-                                <th>Party Name</th>
-                                <th>Party Place</th>
-                                <th>Party Taluka</th>
-                                <th>Crop</th>
-                                <th>Variety</th>
-                                <th>Total Packet</th>
+                                <th>Company</th>
+                                <th>Category</th>
+                                <th>Size</th>
+                                <th>Total Quantity</th>
                                 <th>Date</th>
-                                <th>Transport</th>
-                                <th>LR NO</th>
-                                <th>Frieght</th>
                                 
                             </tr>
                         </thead>
@@ -134,13 +129,8 @@
                                 <td>{{ i.2 }}</td>
                                 <td>{{ i.3 }}</td>
                                 <td>{{ i.4 }}</td>
+                                <td>{{ i.5 }}</td>
                                 <td>{{ i.6 }}</td>
-                                <td>{{ i.7 }}</td>
-                                <td>{{ i.8 }}</td>
-                                <td>{{ i.9 }}</td>
-                                <td>{{ i.10 }}</td>
-                                <td>{{ i.11 }}</td>
-                                <td>{{ i.12 }}</td>
                                
                                
                                
@@ -208,25 +198,7 @@
         });
     });
 
-    $("#company").change(function () {
-        const comapnyID = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-        $.ajax({                       // initialize an AJAX request
-            type: "POST",
-            url: '{% url "get_agent_company_ajax" %}',
-            data: {
-                'company_id': comapnyID,       // add the country id to the POST parameters
-                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-            },
-            success: function (data) {   // `data` is from `get_topics_ajax` view function
-                let html_data = '<option value="" selected disabled>------------</option>';
-                data.forEach(function (data) {
-            
-                    html_data += `<option value="${data.id}" >${data.name}</option>` 
-                });
-                $("#agent").html(html_data); // replace the contents of the topic input with the data that came from the server
-            }
-        });
-    });
+    
     
 </script>
 

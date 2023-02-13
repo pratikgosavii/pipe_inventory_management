@@ -23,15 +23,15 @@ class inward_Form(forms.ModelForm):
             'goods_company': forms.Select(attrs={
                 'class': 'form-control', 'id': 'pck_size'
             }),
-            'transport': forms.Select(attrs={
-                'class': 'form-control', 'id': 'transport'
-            }),
-            'LR_number': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'bag_size'
-            }),
-            'freight': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'bag_size'
-            }),
+            # 'transport': forms.Select(attrs={
+            #     'class': 'form-control', 'id': 'transport'
+            # }),
+            # 'LR_number': forms.TextInput(attrs={
+            #     'class': 'form-control', 'id': 'bag_size'
+            # }),
+            # 'freight': forms.TextInput(attrs={
+            #     'class': 'form-control', 'id': 'bag_size'
+            # }),
             'bags': forms.NumberInput(attrs={
                 'class': 'form-control', 'id': 'bag_size'
             }),
@@ -65,15 +65,15 @@ class outward_Form(forms.ModelForm):
             'gate_pass_name': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'gate_pass_name'
             }),
-             'transport': forms.Select(attrs={
-                'class': 'form-control', 'id': 'transport'
-            }),
-            'LR_number': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'bag_size'
-            }),
-            'freight': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'bag_size'
-            }),
+            #  'transport': forms.Select(attrs={
+            #     'class': 'form-control', 'id': 'transport'
+            # }),
+            # 'LR_number': forms.TextInput(attrs={
+            #     'class': 'form-control', 'id': 'bag_size'
+            # }),
+            # 'freight': forms.TextInput(attrs={
+            #     'class': 'form-control', 'id': 'bag_size'
+            # }),
             'bags': forms.NumberInput(attrs={
                 'class': 'form-control', 'id': 'bag_size'
             }),

@@ -1035,22 +1035,16 @@ def report_inward(request):
 
 
     
-    filtered_data = list(filtered_data.values_list('DC_number', 'agent__name', 'agent__place', 'agent__taluka', 'agent__district', 'company_goods__name', 'goods_company__goods_company_name', 'bags', 'DC_date', 'transport__name', 'LR_number', 'freight'))
+    filtered_data = list(filtered_data.values_list('DC_number', 'company', 'company_goods__name', 'goods_company__goods_company_name', 'bags', 'DC_date'))
 
     vals1 = []
     vals1.append('Serial')
     vals1.append("DC Number")
-    vals1.append("Party Name")
-    vals1.append("Party Place")
-    vals1.append("Party Taluka")
-    vals1.append("Party District")
-    vals1.append("Crop")
-    vals1.append("Variety")
-    vals1.append('Packet')
+    vals1.append("Company")
+    vals1.append("Category")
+    vals1.append("Size")
+    vals1.append('Quantity')
     vals1.append('Date')
-    vals1.append('Transport')
-    vals1.append('LR Number')
-    vals1.append('Freight')
 
     vals.append(vals1)
 
@@ -1065,12 +1059,6 @@ def report_inward(request):
         vals1.append(i[3])
         vals1.append(i[4])
         vals1.append(i[5])
-        vals1.append(i[6])
-        vals1.append(i[7])
-        vals1.append(i[8])
-        vals1.append(i[9])
-        vals1.append(i[10])
-        vals1.append(i[11])
 
         vals.append(vals1)
 
@@ -1122,7 +1110,7 @@ def report_outward(request):
     outward_filterd_data = outward_filter(request.GET, outward_data)
     outward_filterd_data = outward_filterd_data.qs
 
-    outward_filterd_data = list(outward_filterd_data.values_list('DC_number', 'agent__name', 'agent__place', 'agent__taluka', 'agent__district', 'company_goods__name', 'goods_company__goods_company_name', 'bags', 'DC_date', 'transport__name', 'LR_number', 'freight'))
+    outward_filterd_data = list(outward_filterd_data.values_list('DC_number', 'company', 'company_goods__name', 'goods_company__goods_company_name', 'bags', 'DC_date'))
     # print(out)
 
     outward_filterd_data = list(map(list, outward_filterd_data))
@@ -1132,19 +1120,13 @@ def report_outward(request):
 
 
     vals1 = []
-    vals1.append("Serial")
+    vals1.append('Serial')
     vals1.append("DC Number")
-    vals1.append("Party Name")
-    vals1.append("Party Place")
-    vals1.append("Party Taluka")
-    vals1.append("Party District")
-    vals1.append("Crop")
-    vals1.append("Variety")
-    vals1.append('Packet')
+    vals1.append("Company")
+    vals1.append("Category")
+    vals1.append("Size")
+    vals1.append('Quantity')
     vals1.append('Date')
-    vals1.append('Transport')
-    vals1.append('LR Number')
-    vals1.append('Freight')
     vals.append(vals1)
 
 
@@ -1158,12 +1140,6 @@ def report_outward(request):
         vals1.append(i[3])
         vals1.append(i[4])
         vals1.append(i[5])
-        vals1.append(i[6])
-        vals1.append(i[7])
-        vals1.append(i[8])
-        vals1.append(i[9])
-        vals1.append(i[10])
-        vals1.append(i[11])
         vals.append(vals1)
 
    

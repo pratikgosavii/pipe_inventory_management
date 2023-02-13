@@ -9,6 +9,19 @@ ist = pytz.timezone('Asia/Kolkata')
 
 
 
+
+
+class godown(models.Model):
+
+    name = models.CharField(max_length=120, unique=False)
+    
+    
+    def __str__(self):
+        return self.name
+
+
+
+
 class company(models.Model):
 
     company_name = models.CharField(max_length=120, unique=True)

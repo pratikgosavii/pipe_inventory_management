@@ -87,7 +87,7 @@ def add_inward(request):
 
         if DC_date:
 
-            date_time = numOfDays(DC_date)
+            date_time = DC_date
             print('in if')
         else:
             date_time = datetime.now(IST)
@@ -104,7 +104,6 @@ def add_inward(request):
             a = forms.cleaned_data['company']
             b = forms.cleaned_data['company_goods']
             c = forms.cleaned_data['goods_company']
-            d = forms.cleaned_data['agent']
             e = forms.cleaned_data['bags']
 
             try:
@@ -374,11 +373,10 @@ def add_outward(request):
         forms = outward_Form(request.POST)
         DC_date = request.POST.get('DC_date')
 
-        date_time = numOfDays(DC_date)
 
         if DC_date:
 
-            date_time = numOfDays(DC_date)
+            date_time = DC_date
         else:
             date_time = datetime.now(IST)
 
@@ -1705,3 +1703,30 @@ def list_return_delete(request):
 
 
 
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    response = HttpResponse(content_type='application/pdf')
+    pdf_status = pisa.CreatePDF(html, dest=response)
+
+    if pdf_status.err:
+        return HttpResponse('Some errors were encountered <pre>' + html + '</pre>')
+
+    return response
+
+
+def ResultList(request, outward_id):
+    template_name = "transactions/gate_pass.html"
+    records = outward.objects.get(id = outward_id)
+
+    return render_to_pdf(
+        template_name,
+        {
+            "record": records,
+        },
+    )

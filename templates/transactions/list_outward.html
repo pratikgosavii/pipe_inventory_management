@@ -100,12 +100,7 @@
                         </select>
                     </div>
                     
-                    <label for="inputStatus">Name of Party</label>
-                    <select id="agent" class="form-control-sm custom-select" name="agent">
-    
-                   
-    
-                    </select>
+                    
                     <label for="inputStatus">Category</label>
                     <select id="company_goods" class="form-control-sm custom-select" name="company_goods">
     
@@ -152,8 +147,6 @@
                             <tr>
                                 <th class="serial">#</th>
                                 <th>Company Name</th>
-                                <th>Party</th>
-                                <th>Place</th>
                                 <th>Category</th>
                                 <th>Size</th>
                                 <th>DC number</th>
@@ -175,8 +168,6 @@
                                 <input type="hidden" value="{{ i.id }}">
                                 <td class="serial">{{ forloop.counter }}</td>
                                 <td>{{ i.company.company_name }}</td>
-                                <td>{{ i.agent.name }}</td>
-                                <td>{{ i.agent.place }}</td>
                                 <td>{{ i.company_goods.name }}</td>
                                 <td>{{ i.goods_company.goods_company_name }}</td>
                                 <td>{{ i.DC_number }}</td>
@@ -189,6 +180,10 @@
 
                                 
                                 <td>  
+                                   <a href="{% url 'list' i.id %}"> <button id="payment-button"  style="background-color: green; border: green; padding: 10px;border-radius: 12px;" type="submit" class="btn-info ">
+                                        <span id="payment-button-amount">Gate Pass</span>
+                                    </button>  </a>
+                                   
                                    <a href="{% url 'update_outward' i.id %}"> <button id="payment-button"  style="background-color: green; border: green; padding: 10px;border-radius: 12px;" type="submit" class="btn-info ">
                                         <span id="payment-button-amount">View</span>
                                     </button>  </a>
@@ -299,25 +294,6 @@
     });
 
 
-    $("#company").change(function () {
-        const comapnyID = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-        $.ajax({                       // initialize an AJAX request
-            type: "POST",
-            url: '{% url "get_agent_company_ajax" %}',
-            data: {
-                'company_id': comapnyID,       // add the country id to the POST parameters
-                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-            },
-            success: function (data) {   // `data` is from `get_topics_ajax` view function
-                let html_data = '<option value="" selected disabled>------------</option>';
-                data.forEach(function (data) {
-            
-                    html_data += `<option value="${data.id}" >${data.name}</option>` 
-                });
-                $("#agent").html(html_data); // replace the contents of the topic input with the data that came from the server
-            }
-        });
-    });
 
 
     

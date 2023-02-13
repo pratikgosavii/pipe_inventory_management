@@ -12,17 +12,16 @@ from store.models import *
 
 class inward(models.Model):
 
+    godown = models.ForeignKey(godown , on_delete=models.CASCADE, related_name='sdwe')
     company = models.ForeignKey(company , on_delete=models.CASCADE, related_name='sdwe')
     company_goods = models.ForeignKey(company_goods , on_delete=models.CASCADE, related_name='wfgv')
     goods_company = models.ForeignKey(goods_company , on_delete=models.CASCADE, related_name='xvc')
-    agent = models.ForeignKey(agent , on_delete=models.CASCADE, related_name='sdv', null = True, blank = True)
     transport = models.ForeignKey(transport , on_delete=models.CASCADE, related_name='sdsxc', null=True, blank=True)
     LR_number = models.CharField(max_length=50, null = True, blank = True)
     freight = models.CharField(max_length=50, null = True, blank = True)
     bags = models.BigIntegerField()
     DC_number = models.BigIntegerField()
-    bill_no = models.BigIntegerField()
-    DC_date = models.DateTimeField(auto_now_add=False)
+    DC_date = models.DateField(auto_now_add=False)
 
     def __str__(self):
         return self.company.company_name
@@ -31,6 +30,7 @@ class inward(models.Model):
 
 class outward(models.Model):
 
+    godown = models.ForeignKey(godown , on_delete=models.CASCADE, related_name='fgv')
     company = models.ForeignKey(company , on_delete=models.CASCADE, related_name='fgv')
     company_goods = models.ForeignKey(company_goods , on_delete=models.CASCADE, related_name='fd')
     goods_company = models.ForeignKey(goods_company , on_delete=models.CASCADE, related_name='cvg')
@@ -40,8 +40,11 @@ class outward(models.Model):
     freight = models.CharField(max_length=50, null = True, blank = True)
     bags = models.BigIntegerField()
     DC_number = models.BigIntegerField()
-    bill_no = models.BigIntegerField()
-    DC_date = models.DateTimeField(auto_now_add=False)
+    DC_date = models.DateField(auto_now_add=False)
+
+
+    gate_pass_no = models.BigIntegerField(default=1111, null = True, blank = True)
+    gate_pass_name = models.CharField(max_length=100, null = True, blank = True)
 
     
 
@@ -51,13 +54,13 @@ class supply_return(models.Model):
     company = models.ForeignKey(company , on_delete=models.CASCADE, related_name='we')
     company_goods = models.ForeignKey(company_goods , on_delete=models.CASCADE, related_name='tr')
     goods_company = models.ForeignKey(goods_company , on_delete=models.CASCADE, related_name='wegvge')
-    agent = models.ForeignKey(agent , on_delete=models.CASCADE, related_name='fgrrt')
     transport = models.ForeignKey(transport , on_delete=models.CASCADE, related_name='scxsesdf', null=True, blank=True)
     LR_number = models.CharField(max_length=50, null = True, blank = True)
     freight = models.CharField(max_length=50, null = True, blank = True)
     bags = models.BigIntegerField()
     DC_number = models.CharField(max_length=566)
-    DC_date = models.DateTimeField(auto_now_add=False)
+    DC_date = models.DateField(auto_now_add=False)
+
 
 
 

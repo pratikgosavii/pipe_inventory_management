@@ -45,24 +45,22 @@
                         <form action="#" id="submitform" method="post">
                             {% csrf_token %}
 
-                                   
+                            
                             <div class="form-group">
-                                <label for="name" class="control-label mb-1">Bill No</label>
-                                {{ form.bill_no }}
+                                <label for="name" class="control-label mb-1">Godown Name</label>
+                                {{ form.godown }}
                             </div>
 
+
+                            <div class="form-group">
+                                <label for="name" class="control-label mb-1">Name of buyer</label>
+                                {{ form.gate_pass_name }}
+                            </div>
 
                             <div class="form-group">
                                 <label for="name" class="control-label mb-1">Company Name</label>
                                 {{ form.company }}
                             </div>
-
-                            <label for="inputStatus">Name of Party</label>
-                            <select id="agent" class="form-control-sm custom-select" name="agent">
-
-                        
-
-                            </select>
 
                             <label for="inputStatus">Category</label>
                             <select id="company_goods" class="form-control-sm custom-select" name="company_goods">

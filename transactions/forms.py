@@ -1,5 +1,5 @@
 from django import forms
-from django.forms.widgets import DateTimeInput
+from django.forms.widgets import DateInput
 
 from .models import *
 from django.contrib.admin.widgets import  AdminDateWidget, AdminTimeWidget, AdminSplitDateTime
@@ -11,6 +11,9 @@ class inward_Form(forms.ModelForm):
         model = inward
         fields = '__all__'
         widgets = {
+            'godown': forms.Select(attrs={
+                'class': 'form-control', 'id': 'godown'
+            }),
             'company': forms.Select(attrs={
                 'class': 'form-control', 'id': 'company'
             }),
@@ -19,9 +22,6 @@ class inward_Form(forms.ModelForm):
             }),
             'goods_company': forms.Select(attrs={
                 'class': 'form-control', 'id': 'pck_size'
-            }),
-             'agent': forms.Select(attrs={
-                'class': 'form-control', 'id': 'total_pck'
             }),
             'transport': forms.Select(attrs={
                 'class': 'form-control', 'id': 'transport'
@@ -39,7 +39,7 @@ class inward_Form(forms.ModelForm):
                 'class': 'form-control', 'id': 'total_bag'
             }),
 
-            'DC_date': DateTimeInput(attrs={ 'class': 'form-control', 'type': 'datetime-local'}, format = '%Y-%m-%dT%H:%M'),
+            'DC_date': DateInput(attrs={ 'class': 'form-control', 'type': 'date'}, format = '%Y-%m-%d'),
             
         }
 
@@ -50,6 +50,9 @@ class outward_Form(forms.ModelForm):
         model = outward
         fields = '__all__'
         widgets = {
+            'godown': forms.Select(attrs={
+                'class': 'form-control', 'id': 'godown'
+            }),
             'company': forms.Select(attrs={
                 'class': 'form-control', 'id': 'company'
             }),
@@ -59,8 +62,8 @@ class outward_Form(forms.ModelForm):
             'goods_company': forms.Select(attrs={
                 'class': 'form-control', 'id': 'pck_size'
             }),
-             'agent': forms.Select(attrs={
-                'class': 'form-control', 'id': 'total_pck'
+            'gate_pass_name': forms.TextInput(attrs={
+                'class': 'form-control', 'id': 'gate_pass_name'
             }),
              'transport': forms.Select(attrs={
                 'class': 'form-control', 'id': 'transport'
@@ -78,7 +81,7 @@ class outward_Form(forms.ModelForm):
                 'class': 'form-control', 'id': 'total_bag'
             }),
 
-            'DC_date': DateTimeInput(attrs={ 'class': 'form-control', 'type': 'datetime-local'}, format = '%Y-%m-%dT%H:%M'),
+            'DC_date': DateInput(attrs={ 'class': 'form-control', 'type': 'date'}, format = '%Y-%m-%d'),
             
         }
 
@@ -117,7 +120,7 @@ class supply_return_Form(forms.ModelForm):
                 'class': 'form-control', 'id': 'total_bag'
             }),
 
-            'DC_date': DateTimeInput(attrs={ 'class': 'form-control', 'type': 'datetime-local'}, format = '%Y-%m-%dT%H:%M'),
+            'DC_date': DateInput(attrs={ 'class': 'form-control', 'type': 'date'}, format = '%Y-%m-%d'),
             
         }
 

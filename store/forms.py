@@ -15,6 +15,19 @@ class company_Form(forms.ModelForm):
             
         }
 
+        
+class godown_Form(forms.ModelForm):
+    class Meta:
+        model = godown
+        
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control', 'id': 'name'
+            }),
+            
+        }
+
 
 class company_goods_Form(forms.ModelForm):
     class Meta:

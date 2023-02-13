@@ -25,7 +25,6 @@ def numOfDays(date1):
     dt1 = date1.split('T')
 
     time = dt1[1]
-    time1 = time.split(':')
 
     dt1 = dt1[0]
     
@@ -36,7 +35,7 @@ def numOfDays(date1):
     month = int(dt1[1])
     day = int(dt1[2])
 
-    date1 = datetime(year,month, day , int(time1[0]), int(time1[1]), tzinfo=ist)
+    date1 = datetime(year,month, day, tzinfo=ist)
 
     print('--------------')
     print(date1)
@@ -104,6 +103,82 @@ def get_agent_company_ajax(request):
             data['error_message'] = 'error'
             return JsonResponse(data)
         return JsonResponse(list(agent_data.values('id', 'name')), safe = False) 
+
+
+
+@login_required(login_url='login')
+def add_godown(request):
+
+    if request.method == 'POST':
+
+        forms = godown_Form(request.POST)
+
+        if forms.is_valid():
+            forms.save()
+            return redirect('list_godown')
+        else:
+            print(forms.errors)
+    
+    else:
+
+        forms = godown_Form()
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'store/add_godown.html', context)
+
+        
+
+@login_required(login_url='login')
+def update_godown(request, godown_id):
+
+    if request.method == 'POST':
+
+        instance = godown.objects.get(id=godown_id)
+
+        forms = godown_Form(request.POST, instance=instance)
+
+        if forms.is_valid():
+            forms.save()
+            return redirect('list_godown')
+        else:
+            print(forms.errors)
+    
+    else:
+
+        instance = godown.objects.get(id=godown_id)
+        forms = godown_Form(instance=instance)
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'store/add_godown.html', context)
+
+        
+
+@login_required(login_url='login')
+def delete_godown(request, godown_id):
+
+    godown.objects.get(id=godown_id).delete()
+
+    return HttpResponseRedirect(reverse('list_godown_delete'))
+
+
+        
+
+@login_required(login_url='login')
+def list_godown(request):
+
+    data = godown.objects.all()
+
+    context = {
+        'data': data
+    }
+
+    return render(request, 'store/list_godown.html', context)
+
+
 
 @login_required(login_url='login')
 def add_company(request):

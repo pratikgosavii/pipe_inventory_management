@@ -9,6 +9,11 @@ urlpatterns = [
     path('get-goods_company-ajax/', get_goods_company_ajax, name="get_goods_company_ajax"),
     path('get-agent_company-ajax/', get_agent_company_ajax, name="get_agent_company_ajax"),
 
+    path('add-godown/', add_godown, name='add_godown'),
+    path('update-godown/<godown_id>', update_godown, name='update_godown'),
+    path('delete-godown/<godown_id>', delete_godown, name='delete_godown'),
+    path('list-godown/', list_godown, name='list_godown'),
+
     path('add-company/', add_company, name='add_company'),
     path('update-company/<company_id>', update_company, name='update_company'),
     path('delete-company/<company_id>', delete_company, name='delete_company'),

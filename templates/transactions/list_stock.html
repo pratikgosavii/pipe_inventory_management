@@ -52,62 +52,37 @@
 {% block content %}
 
 
-<p>
+<div style="display:flex;margin-bottom : 20px;">
     
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-      Stock Report
-    </button>
-  </p>
-  <div class="collapse" id="collapseExample">
-    <div class="card card-body">
+    <a href="{% url 'generate_report' %}"> <button class="btn btn-primary"> download </button> </a>
+
+    
+    <label style="color:black;margin-left: 50px;"> Godown </label>
+    
+    <select class="form-control" style="width:20%;" id="godown">
+        
+        {% if godown_id %}
+
+            <option>{{ godown_id }}</option>
+
+        {% else %}
+
+            <option>-------------</option>
+
+        {% endif %}
+
+        {% for i in godown_data %}
+      
+            <option value="{{ i.name }}">{{ i.name }}</option>
+
+        {% endfor %}
+      
+      </select>
+
       
 
-        <form method="get" action="{% url 'generate_report' %}" style="padding:15px;">
-
-            {% csrf_token %}
-
-            <div class="form-group">
-
-                <div class="form-group">
-                    <div class="form-group">
-                        <label for="name" class="control-label mb-1">Company Name</label>
-                        <select name="company" class="form-control" id="company">
-                            <option value="" selected="">---------</option>
-    
-                            {% for i in company_data %}
-    
-                                <option value="{{ i.id }}" >{{ i.company_name }}</option>
-    
-                            {% endfor %}
-    
-                          </select>
-                    </div>
-
-                    <label for="inputStatus">Category</label>
-                    <select id="company_goods" class="form-control-sm custom-select" name="company_goods">
-
-                
-
-                    </select>
-
-                    <label for="inputStatus">Variety</label>
-                        <select id="goods_company" class="form-control-sm custom-select" name="goods_company">
-
-                    
-
-                    </select>
-
-                </div>
-                    
-            
-            </div> <br>
-            
-            <button class="btn btn-primary" type="submit" > Search </button>
-
-        </form>
     </div>
-  </div>
-
+    
   
 
 <div class="row">
@@ -122,6 +97,7 @@
                         <thead>
                             <tr>
                                 <th class="serial">#</th>
+                                <th>Godown Name</th>
                                 <th>Company Name</th>
                                 <th>Category</th>
                                 <th>Size</th>
@@ -134,6 +110,7 @@
                             {% for i in data %}
                             <tr>
                                 <td class="serial">{{ forloop.counter }}</td>
+                                <td>{{ i.godown }}</td>
                                 <td>{{ i.company }}</td>
                                 <td>{{ i.company_goods }}</td>
                                 <td>{{ i.goods_company }}</td>
@@ -226,6 +203,14 @@
         });
     });
 
+
+        
+    $('#godown').change(function(){
+        url = window.location.href
+        url = url.split('?')[0] 
+        url = url + '?godown_name=' + $(this).val()
+        location.href = url;
+    })
 
     
 </script>

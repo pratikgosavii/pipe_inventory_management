@@ -4,17 +4,34 @@
 
 {% block content %}
 
-
+{% comment %} 
     <a href="{% url 'report_daily' %}"> <button class="btn btn-primary" type="submit">
         Daily Report
     </button> </a>
     
     <a href="{% url 'generate_report_main' %}"> <button class="btn btn-primary" type="submit">
         Monthly Report
-    </button> </a><br><br>
+    </button> </a><br><br> {% endcomment %}
 
     <!-- Widgets  -->
     <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="stat-widget-five">
+                        <div class="stat-icon dib flat-color-1">
+                            <i class="fa fa-home"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="text-left dib">
+                                <div class="stat-text"><span class="count">{{ godown }}</span></div>
+                                <div class="stat-heading">Godown</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body">
@@ -24,7 +41,7 @@
                         </div>
                         <div class="stat-content">
                             <div class="text-left dib">
-                                <div class="stat-text"><span class="count"></span></div>
+                                <div class="stat-text"><span class="count">{{ stock }}</span></div>
                                 <div class="stat-heading">Stock</div>
                             </div>
                         </div>
@@ -33,66 +50,14 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="stat-widget-five">
-                        <div class="stat-icon dib flat-color-2">
-                            <i class="fa fa-product-hunt"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="text-left dib">
-                                <div class="stat-text"><span class="count"></span></div>
-                                <div class="stat-heading">Inward</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="stat-widget-five">
-                        <div class="stat-icon dib flat-color-3">
-                            <i class="fa fa-paper-plane"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="text-left dib">
-                                <div class="stat-text"><span class="count"></span></div>
-                                <div class="stat-heading">Outward</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="stat-widget-five">
-                        <div class="stat-icon dib flat-color-4">
-                            <i class="fa fa-users"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="text-left dib">
-                                <div class="stat-text"><span class="count"></span></div>
-                                <div class="stat-heading">Buyer</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      
     </div>
     <!-- /Widgets -->
     
     <div class="clearfix"></div>
 
     <!-- Orders -->
-    <div class="orders">
+    {% comment %} <div class="orders">
         <div class="row">
             <div class="col-xl-12">
                 <div class="card">
@@ -158,6 +123,6 @@
 
             
         </div>
-    </div>
+    </div> {% endcomment %}
     <!-- /.orders -->
 {% endblock content %}

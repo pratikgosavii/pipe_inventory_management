@@ -154,24 +154,16 @@ class supply_return_filter(django_filters.FilterSet):
 
 class stock_filter(django_filters.FilterSet):
 
-    company = django_filters.ModelChoiceFilter(
-        queryset=company.objects.all(),
+    godown = django_filters.ModelChoiceFilter(
+        queryset=godown.objects.all(),
         widget=forms.Select(
             attrs={
                 'class' : 'form-control',
-                'id' : 'company'
+                'id' : 'godown'
             })
     )
 
-    company_goods = django_filters.ModelChoiceFilter( 
-        queryset=company_goods.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control', 'id' : 'company_goods'}))
-
-    goods_company = django_filters.ModelChoiceFilter( 
-        queryset=goods_company.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control', 'id' : 'goods_company'}))
-
-   
+    
 
     class Meta:
         model = stock

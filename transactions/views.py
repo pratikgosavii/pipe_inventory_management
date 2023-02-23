@@ -105,9 +105,10 @@ def add_inward(request):
             b = forms.cleaned_data['company_goods']
             c = forms.cleaned_data['goods_company']
             e = forms.cleaned_data['bags']
+            g = forms.cleaned_data['godown']
 
             try:
-                test = stock.objects.get(company = a, company_goods = b, goods_company = c)
+                test = stock.objects.get(godown = g, company = a, company_goods = b, goods_company = c)
 
                 test.total_bag = test.total_bag + e
                 test.save()
@@ -121,7 +122,7 @@ def add_inward(request):
 
             except stock.DoesNotExist:
 
-                test = stock.objects.create(company = a, company_goods = b, goods_company = c, total_bag = e)
+                test = stock.objects.create(godown = g, company = a, company_goods = b, goods_company = c, total_bag = e)
                 return JsonResponse({'status' : 'done'}, safe=False)
 
         else:
@@ -339,7 +340,6 @@ def list_inward(request):
 
         data = inward.objects.filter()
 
-    inward_filter_data = inward_filter()
 
     company_data = company.objects.all()
 
@@ -356,7 +356,6 @@ def list_inward(request):
     context = {
         'data': data,
         'company_data' : company_data,
-        'filter_inward' : inward_filter_data,
         'year' : year
     }
 
@@ -395,9 +394,10 @@ def add_outward(request):
             b = forms.cleaned_data['company_goods']
             c = forms.cleaned_data['goods_company']
             e = forms.cleaned_data['bags']
+            g = forms.cleaned_data['godown']
 
             try:
-                test = stock.objects.get(company = a, company_goods = b, goods_company = c)
+                test = stock.objects.get(godown = g, company = a, company_goods = b, goods_company = c)
 
                 if test.total_bag >= e:
 
@@ -482,10 +482,6 @@ def list_outward(request):
 
         data = data.filter(agent__name__icontains=agent_name)
 
-    
-
-    outward_filter_data = outward_filter()
-
     company_data = company.objects.all()
 
 
@@ -505,7 +501,6 @@ def list_outward(request):
 
     context = {
         'data': data,
-        'filter_outward' : outward_filter_data,
         'company_data' : company_data,
         'year' : year
 
@@ -718,16 +713,23 @@ def delete_outward(request, outward_id):
 @login_required(login_url='login')
 def list_stock(request):
 
-    data = stock.objects.all()
 
-    stock_filter_data = stock_filter()
+    
 
-    company_data = company.objects.all()
+    godown_name = request.GET.get('godown_name')
+
+    if godown_name:
+
+        data = stock.objects.filter(godown__name = godown_name)
+
+    else:
+
+        data = stock.objects.all()
 
     context = {
         'data': data,
-        'stock_filter' : stock_filter_data,
-        'company_data': company_data
+        'godown_id' : godown_name,
+        'godown_data' : godown.objects.all(),
     }
 
     return render(request, 'transactions/list_stock.html', context)
@@ -1257,27 +1259,40 @@ def report_supply_return(request):
 @login_required(login_url='login')
 def generate_report_stock(request):
 
-    print('i am here')
+    godown_name = request.GET.get('godown_name')
 
-    data = stock.objects.all()
+    if godown_name:
 
-    data_stock = stock_filter(request.GET, data)
-    data_stock = data_stock.qs
+        data_stock = stock.objects.filter(godown__name = godown_name)
+
+    else:
+
+        data_stock = stock.objects.all()
+
 
     data1 = []
     data2 = []
 
 
-
+    data1.append('Godown')
+    data1.append('Company Name')
+    data1.append('Category')
+    data1.append('Size')
+    data1.append('Quantity')
+    data2.append(data1)
 
 
     if data_stock:
 
         for i in data_stock:
 
+            data1 = []
+
+
             print('(i.company.company_name')
             print(i.company.company_name)
 
+            data1.append(i.godown)
             data1.append(i.company.company_name)
             data1.append(i.company_goods)
             data1.append(i.goods_company)
@@ -1304,19 +1319,14 @@ def generate_report_stock(request):
 
     link = os.path.join(BASE_DIR) + '\static\csv\\' + name
 
-    stock_filter_data = stock_filter()
+    with open(link, 'r' ) as fh:
+        mime_type  = mimetypes.guess_type(link)
+        print('--------------------')
+        print(mime_type)
+        response = HttpResponse(fh.read(), content_type=mime_type)
+        response['Content-Disposition'] = 'attachment;filename=' + str(link)
 
-    context = {
-        'data': data2,
-        'stock_filter' : stock_filter_data,
-        'link' : link
-
-    }
-
-    return render(request, 'report/stock_report.html', context)
-
-
-
+        return response
 
 @login_required(login_url='login')
 def generate_report_main(request):

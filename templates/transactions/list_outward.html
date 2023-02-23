@@ -39,9 +39,7 @@
 
 <div style="display:flex;margin-bottom : 20px;">
     
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-      Outward Report
-    </button>
+    
 
     
     <label style="color:black;margin-left: 50px;"> Bussiness Year </label>
@@ -66,71 +64,10 @@
       
       </select>
 
-        <form method="get" style="display: flex;position: absolute;right: 0;">
-            
-            <input type="text"  placeholder="Agent name" name="agent_name" id="agent_name" class="form-control" style="width:300px"> <button class="btn btn-info" style="margin-left:10px;">Submit</button>
-        
-        </form>
-
-
-    </div>
-    
-
-  <div class="collapse" id="collapseExample">
-    <div class="card card-body">
       
 
-        <form method="get" action="{% url 'report_outward' %}" style="padding:15px;">
-
-            {% csrf_token %}
-
-            <div class="form-group">
-                <div class="form-group">
-                    <div class="form-group">
-                        <label for="name" class="control-label mb-1">Company Name</label>
-                        <select name="company" class="form-control" id="company">
-                            <option value="" selected="">---------</option>
-    
-                            {% for i in company_data %}
-    
-                                <option value="{{ i.id }}">{{ i.company_name }}</option>
-    
-                            {% endfor %}
-    
-                        </select>
-                    </div>
-                    
-                    
-                    <label for="inputStatus">Category</label>
-                    <select id="company_goods" class="form-control-sm custom-select" name="company_goods">
-    
-                   
-    
-                    </select>
-    
-                    <label for="inputStatus">Size</label>
-                        <select id="goods_company" class="form-control-sm custom-select" name="goods_company">
-        
-                    
-        
-                    </select>
-                    <div class="form-group">
-                        <label for="name" class="control-label mb-1">Start Date</label>
-                        {{ filter_outward.form.DC_date_start__date }}
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="name" class="control-label mb-1">End Date</label>
-                        {{ filter_outward.form.DC_date_end__date }}
-                    </div>
-    
-                </div> <br>
-            </div>
-            <button class="btn btn-primary" type="submit" > Search </button>
-
-        </form>
     </div>
-  </div>
+    
 
     
 
@@ -151,6 +88,7 @@
                                 <th>Size</th>
                                 <th>DC number</th>
                                 <th>Total Packet</th>
+                                <th>Employee Name</th>
 
                                 <th>Date</th>
                                 {% comment %} <th>Transport</th>
@@ -172,6 +110,7 @@
                                 <td>{{ i.goods_company.goods_company_name }}</td>
                                 <td>{{ i.DC_number }}</td>
                                 <td>{{ i.bags }}</td>
+                                <td>{{ i.employee_name }}</td>
 
                                 <td style="min-width:128px;">{{ i.DC_date|date:"d M, Y" }}</td>
                                 {% comment %} <td>{{ i.transport }}</td>

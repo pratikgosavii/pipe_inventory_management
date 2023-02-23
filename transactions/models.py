@@ -17,7 +17,7 @@ class inward(models.Model):
     company_goods = models.ForeignKey(company_goods , on_delete=models.CASCADE, related_name='wfgv')
     goods_company = models.ForeignKey(goods_company , on_delete=models.CASCADE, related_name='xvc')
     # transport = models.ForeignKey(transport , on_delete=models.CASCADE, related_name='sdsxc', null=True, blank=True)
-    # LR_number = models.CharField(max_length=50, null = True, blank = True)
+    employee_name = models.CharField(max_length=50, null = True, blank = True)
     # freight = models.CharField(max_length=50, null = True, blank = True)
     bags = models.BigIntegerField()
     DC_number = models.BigIntegerField()
@@ -38,6 +38,7 @@ class outward(models.Model):
     # transport = models.ForeignKey(transport , on_delete=models.CASCADE, related_name='ddssszc', null=True, blank=True)
     # LR_number = models.CharField(max_length=50, null = True, blank = True)
     # freight = models.CharField(max_length=50, null = True, blank = True)
+    employee_name = models.CharField(max_length=50, null = True, blank = True)
     bags = models.BigIntegerField()
     DC_number = models.BigIntegerField()
     DC_date = models.DateField(auto_now_add=False)
@@ -66,10 +67,12 @@ class supply_return(models.Model):
 
 class stock(models.Model):
 
+    godown = models.ForeignKey(godown , on_delete=models.CASCADE, related_name='sfwwfddfds')
     company = models.ForeignKey(company , on_delete=models.CASCADE, related_name='fsdsdgv')
     company_goods = models.ForeignKey(company_goods , on_delete=models.CASCADE, related_name='fsdsdd')
     goods_company = models.ForeignKey(goods_company , on_delete=models.CASCADE, related_name='csdsvg')
     total_bag = models.BigIntegerField()
+    
 
     
 

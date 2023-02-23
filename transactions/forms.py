@@ -26,9 +26,9 @@ class inward_Form(forms.ModelForm):
             # 'transport': forms.Select(attrs={
             #     'class': 'form-control', 'id': 'transport'
             # }),
-            # 'LR_number': forms.TextInput(attrs={
-            #     'class': 'form-control', 'id': 'bag_size'
-            # }),
+            'employee_name': forms.TextInput(attrs={
+                'class': 'form-control', 'id': 'bag_size'
+            }),
             # 'freight': forms.TextInput(attrs={
             #     'class': 'form-control', 'id': 'bag_size'
             # }),
@@ -65,10 +65,13 @@ class outward_Form(forms.ModelForm):
             'gate_pass_name': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'gate_pass_name'
             }),
+            'employee_name': forms.TextInput(attrs={
+                'class': 'form-control', 'id': 'employee_name'
+            }),
             #  'transport': forms.Select(attrs={
             #     'class': 'form-control', 'id': 'transport'
             # }),
-            # 'LR_number': forms.TextInput(attrs={
+            # 'employee_name': forms.TextInput(attrs={
             #     'class': 'form-control', 'id': 'bag_size'
             # }),
             # 'freight': forms.TextInput(attrs={
@@ -107,7 +110,7 @@ class supply_return_Form(forms.ModelForm):
              'transport': forms.Select(attrs={
                 'class': 'form-control', 'id': 'transport'
             }),
-            'LR_number': forms.TextInput(attrs={
+            'employee_name': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'bag_size'
             }),
             'freight': forms.TextInput(attrs={

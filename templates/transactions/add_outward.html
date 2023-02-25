@@ -188,7 +188,10 @@
                 //window.location.href = http + "{% url 'list_inward' %}"
 
                 if (data.status == 'done'){
-                    $('#myModal').modal('show');
+                    location.reload();
+                    var btn = document.getElementById('payment-button');
+                    btn.disabled = true;
+                    btn.innerText = 'Loading...'
                 }
 
                 else {

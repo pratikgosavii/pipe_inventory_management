@@ -23,15 +23,11 @@ class inward_Form(forms.ModelForm):
             'goods_company': forms.Select(attrs={
                 'class': 'form-control', 'id': 'pck_size'
             }),
-            # 'transport': forms.Select(attrs={
-            #     'class': 'form-control', 'id': 'transport'
-            # }),
             'employee_name': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'bag_size'
             }),
-            # 'freight': forms.TextInput(attrs={
-            #     'class': 'form-control', 'id': 'bag_size'
-            # }),
+           
+           
             'bags': forms.NumberInput(attrs={
                 'class': 'form-control', 'id': 'bag_size'
             }),
@@ -53,9 +49,6 @@ class outward_Form(forms.ModelForm):
             'godown': forms.Select(attrs={
                 'class': 'form-control', 'id': 'godown'
             }),
-            'company': forms.Select(attrs={
-                'class': 'form-control', 'id': 'company'
-            }),
             'company_goods': forms.Select(attrs={
                 'class': 'form-control', 'id': 'name'
             }),
@@ -68,15 +61,6 @@ class outward_Form(forms.ModelForm):
             'employee_name': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'employee_name'
             }),
-            #  'transport': forms.Select(attrs={
-            #     'class': 'form-control', 'id': 'transport'
-            # }),
-            # 'employee_name': forms.TextInput(attrs={
-            #     'class': 'form-control', 'id': 'bag_size'
-            # }),
-            # 'freight': forms.TextInput(attrs={
-            #     'class': 'form-control', 'id': 'bag_size'
-            # }),
             'bags': forms.NumberInput(attrs={
                 'class': 'form-control', 'id': 'bag_size'
             }),
@@ -88,44 +72,6 @@ class outward_Form(forms.ModelForm):
             
         }
 
-
-
-class supply_return_Form(forms.ModelForm):
-    class Meta:
-        model = supply_return
-        fields = '__all__'
-        widgets = {
-            'company': forms.Select(attrs={
-                'class': 'form-control', 'id': 'company'
-            }),
-            'company_goods': forms.Select(attrs={
-                'class': 'form-control', 'id': 'name'
-            }),
-            'goods_company': forms.Select(attrs={
-                'class': 'form-control', 'id': 'pck_size'
-            }),
-             'agent': forms.Select(attrs={
-                'class': 'form-control', 'id': 'total_pck'
-            }),
-             'transport': forms.Select(attrs={
-                'class': 'form-control', 'id': 'transport'
-            }),
-            'employee_name': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'bag_size'
-            }),
-            'freight': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'bag_size'
-            }),
-            'bags': forms.NumberInput(attrs={
-                'class': 'form-control', 'id': 'bag_size'
-            }),
-            'DC_number': forms.TextInput(attrs={
-                'class': 'form-control', 'id': 'total_bag'
-            }),
-
-            'DC_date': DateInput(attrs={ 'class': 'form-control', 'type': 'date'}, format = '%Y-%m-%d'),
-            
-        }
 
 
 
@@ -134,10 +80,7 @@ class goods_company_Form(forms.ModelForm):
         model = stock
         fields = '__all__'
         widgets = {
-             'company': forms.Select(attrs={
-                'class': 'form-control', 'id': 'company'
-            }),
-
+         
             'company_goods': forms.Select(attrs={
                 'class': 'form-control', 'id': 'company_goods'
             }),

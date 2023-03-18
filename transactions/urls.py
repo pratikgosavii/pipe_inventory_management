@@ -21,10 +21,6 @@ urlpatterns = [
 
     path('list-stock/', list_stock, name='list_stock'),
 
-    path('add-return/', add_return, name='add_return'),
-    path('update-return/<return_id>', update_return, name='update_return'),
-    path('list-return/', list_return, name='list_return'),
-
     path('report-daily/', generate_report_daily, name='report_daily'),
     path('report-inward/', report_inward, name='report_inward'),
     path('report-outward/', report_outward, name='report_outward'),

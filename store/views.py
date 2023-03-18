@@ -300,20 +300,13 @@ def update_company_goods(request, company_goods_id):
 
         forms = company_goods_Form(instance = instance)
 
-        comapnyID = instance.company.id
-        comapny_goods_ID = instance.id
-
-        print(comapnyID)
-        print(comapny_goods_ID)
 
         context = {
             'form': forms,
-            'comapnyID' : comapnyID,
-            'comapny_goods_ID' : comapny_goods_ID
             
         }
 
-        return render(request, 'store/update_company_goods.html', context)
+        return render(request, 'store/add_company_goods.html', context)
 
 
 @login_required(login_url='login')
@@ -327,7 +320,7 @@ def delete_company_goods(request, company_goods_id):
 @login_required(login_url='login')
 def list_company_goods(request):
     
-    data = company_goods.objects.all().order_by('company__company_name')
+    data = company_goods.objects.all().order_by('name')
 
     context = {
             'data': data
@@ -355,12 +348,10 @@ def add_goods_company(request):
     else:
 
         forms = goods_company_Form()
-        data = company.objects.all()
-        print(data)
+       
 
         context = {
             'form': forms,
-            'data' : data,
         }
 
         return render(request, 'store/add_goods_company.html', context)
@@ -385,18 +376,12 @@ def update_goods_company(request, company_goods_id):
         
 
         forms = goods_company_Form(instance = instance)
-        comapny_goods_ID = instance.company_goods.id
-
-        print('-----------------')
-        print(instance.company_name.id)
 
         context = {
             'form': forms,
-            'comapnyID' : instance.company_name.id,
-            'comapny_goods_ID' : comapny_goods_ID,
         }
 
-        return render(request, 'store/update_goods_company.html', context)
+        return render(request, 'store/add_goods_company.html', context)
 
 
 @login_required(login_url='login')
@@ -410,7 +395,7 @@ def delete_goods_company(request, company_goods_id):
 @login_required(login_url='login')
 def list_goods_company(request):
     
-    data = goods_company.objects.all().order_by('company_name__company_name')
+    data = goods_company.objects.all().order_by('goods_company_name')
 
     context = {
             'data': data

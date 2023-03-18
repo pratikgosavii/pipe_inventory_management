@@ -7,7 +7,6 @@ from django.http import HttpResponse, JsonResponse
 import pandas as pd
 
 from store.views import numOfDays
-from transactions.filters import inward_filter, outward_filter, stock_filter, supply_return_filter
 from .forms import *
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -47,7 +46,6 @@ def demo(request):
 
         a = inward.objects.filter(company__company_name = ab.company.company_name, company_goods__name = ab.company_goods.name, goods_company__goods_company_name = ab.goods_company.goods_company_name)
         b = outward.objects.filter(company__company_name =  ab.company.company_name, company_goods__name = ab.company_goods.name, goods_company__goods_company_name = ab.goods_company.goods_company_name)
-        c = supply_return.objects.filter(company__company_name =  ab.company.company_name, company_goods__name = ab.company_goods.name, goods_company__goods_company_name = ab.goods_company.goods_company_name)
 
         x = 0
         y = 0
@@ -101,14 +99,13 @@ def add_inward(request):
         if forms.is_valid():
             forms.save()
 
-            a = forms.cleaned_data['company']
             b = forms.cleaned_data['company_goods']
             c = forms.cleaned_data['goods_company']
             e = forms.cleaned_data['bags']
             g = forms.cleaned_data['godown']
 
             try:
-                test = stock.objects.get(godown = g, company = a, company_goods = b, goods_company = c)
+                test = stock.objects.get(godown = g, company_goods = b, goods_company = c)
 
                 test.total_bag = test.total_bag + e
                 test.save()
@@ -117,27 +114,44 @@ def add_inward(request):
                 print('--------------------------')
                 print('--------------------------')
 
-                return JsonResponse({'status' : 'done'}, safe=False)
+                context = {
+                    'form': forms
+                }
+               
+                return render(request, 'transactions/add_inward.html', context)
+
 
 
             except stock.DoesNotExist:
 
-                test = stock.objects.create(godown = g, company = a, company_goods = b, goods_company = c, total_bag = e)
-                return JsonResponse({'status' : 'done'}, safe=False)
+                test = stock.objects.create(godown = g, company_goods = b, goods_company = c, total_bag = e)
+                
+
+                context = {
+                    'form': forms
+                }
+               
+                return render(request, 'transactions/add_inward.html', context)
+
 
         else:
                 
-            error = forms.errors.as_json()
-            print(error)
-            return JsonResponse({'error' : error}, safe=False)
+            context = {
+                'form': forms
+            }
+            
+            return render(request, 'transactions/add_inward.html', context)
+
+
 
     else:
 
         forms = inward_Form()
-
+             
         context = {
             'form': forms
         }
+        
         return render(request, 'transactions/add_inward.html', context)
 
 
@@ -151,7 +165,6 @@ def update_inward(request, inward_id ):
 
         data_inward = instance_inward
 
-        company_id = request.POST.get('company')
         company_goods_id = request.POST.get('company_goods')
         goods_company_id = request.POST.get('goods_company')
         bags = request.POST.get('bags')
@@ -174,29 +187,27 @@ def update_inward(request, inward_id ):
 
             instance_inward = inward.objects.get(id = inward_id)
 
-            if int(instance_inward.company.id) != int(company_id) or int(instance_inward.company_goods.id) != int(company_goods_id) or int(instance_inward.goods_company.id) != int(goods_company_id):
+            if int(instance_inward.company.id) != int(instance_inward.company_goods.id) != int(company_goods_id) or int(instance_inward.goods_company.id) != int(goods_company_id):
 
                 try:
 
-                    company_instance = company.objects.get(id = company_id) 
                     company_goods_instance = company_goods.objects.get(id = company_goods_id) 
                     goods_company_instance = goods_company.objects.get(id = goods_company_id) 
 
-                    test = stock.objects.get(company = company_instance, company_goods = company_goods_instance, goods_company = goods_company_instance)
+                    test = stock.objects.get(company_goods = company_goods_instance, goods_company = goods_company_instance)
                     test.total_bag = test.total_bag + int(bags)
                     test.save()
 
                     print('1')
 
                 except stock.DoesNotExist:
-                    stock.objects.create(company = company_instance, company_goods = company_goods_instance, goods_company = goods_company_instance, total_bag =  int(bags))
+                    stock.objects.create(company_goods = company_goods_instance, goods_company = goods_company_instance, total_bag =  int(bags))
 
 
-                company_instance = company.objects.get(id =instance_inward.company.id)
                 company_goods_instance = company_goods.objects.get(id = instance_inward.company_goods.id)
                 goods_company_instance = goods_company.objects.get(id = instance_inward.goods_company.id)
 
-                stock_before = stock.objects.get(company = company_instance, company_goods = company_goods_instance, goods_company = goods_company_instance)
+                stock_before = stock.objects.get(company_goods = company_goods_instance, goods_company = goods_company_instance)
                 stock_before.total_bag = stock_before.total_bag - instance_inward.bags
                 stock_before.save()
 
@@ -214,7 +225,7 @@ def update_inward(request, inward_id ):
 
                 if instance_inward.bags != int(bags):
 
-                    test = stock.objects.get(company = company_id, company_goods = company_goods_id, goods_company = goods_company_id)
+                    test = stock.objects.get(company_goods = company_goods_id, goods_company = goods_company_id)
 
                     if instance_inward.bags > int(bags):
                         minus_stock = instance_inward.bags - int(bags)
@@ -255,14 +266,12 @@ def update_inward(request, inward_id ):
         else:
         
             instance = inward.objects.get(id = inward_id)
-            comapnyID = forms.instance.company.id
             comapny_goods_ID = forms.instance.company_goods.id
             goods_company_ID = forms.instance.goods_company.id
             agent_ID = forms.instance.agent.id
 
             context = {
                 'form': forms,
-                'comapnyID' : comapnyID,
                 'comapny_goods_ID' : comapny_goods_ID,
                 'goods_company_ID' : goods_company_ID,
                 'agent_ID' : agent_ID
@@ -279,7 +288,6 @@ def update_inward(request, inward_id ):
 
         instance = inward.objects.get(id = inward_id)
         forms = inward_Form(instance = instance)
-        comapnyID = forms.instance.company.id
         comapny_goods_ID = forms.instance.company_goods.id
         goods_company_ID = forms.instance.goods_company.id
         agent_ID = forms.instance.agent.id
@@ -300,7 +308,7 @@ def delete_inward(request, inward_id):
     try:
         con = inward.objects.filter(id = inward_id).first()
 
-        test = stock.objects.get(company = con.company, company_goods = con.company_goods, goods_company = con.goods_company)
+        test = stock.objects.get(company_goods = con.company_goods, goods_company = con.goods_company)
         if test.total_bag >= con.bags:
             test.total_bag = test.total_bag - con.bags
             test.save()
@@ -341,7 +349,6 @@ def list_inward(request):
         data = inward.objects.filter()
 
 
-    company_data = company.objects.all()
 
     page = request.GET.get('page', 1)
     paginator = Paginator(data, 50)
@@ -355,7 +362,6 @@ def list_inward(request):
 
     context = {
         'data': data,
-        'company_data' : company_data,
         'year' : year
     }
 
@@ -390,14 +396,13 @@ def add_outward(request):
 
         if forms.is_valid():
 
-            a = forms.cleaned_data['company']
             b = forms.cleaned_data['company_goods']
             c = forms.cleaned_data['goods_company']
             e = forms.cleaned_data['bags']
             g = forms.cleaned_data['godown']
 
             try:
-                test = stock.objects.get(godown = g, company = a, company_goods = b, goods_company = c)
+                test = stock.objects.get(godown = g, company_goods = b, goods_company = c)
 
                 if test.total_bag >= e:
 
@@ -406,27 +411,46 @@ def add_outward(request):
                     print('save')
                     forms.save()
 
-                    return JsonResponse({'status' : 'done'}, safe=False)
+                    
+                    forms = outward_Form()
+
+                    context = {
+                        'form': forms
+                    }
+                    return render(request, 'transactions/add_outward.html', context)
 
 
                 else:
-                 
-                    error = json.dumps({ 'error' : [{'message' : 'Outward is more than Stock'}]})
-                    print(error)
-                    return JsonResponse({'error' : error}, safe=False)
+
+                    messages.error(request, 'Outward is more than stock')
+                
+                    context = {
+                        'form': forms
+                    }
+                    return render(request, 'transactions/add_outward.html', context)
+
 
 
             except stock.DoesNotExist:
+               
+                messages.error(request,"no stock in inverntory")
 
-                error = json.dumps({ 'error' : 'no stock in inventory'})
-                print(error)
-                return JsonResponse({'error' : error}, safe=False)
+                context = {
+                    'form': forms
+                }
+               
+                return render(request, 'transactions/add_outward.html', context)
 
 
         else:
-            error = forms.errors.as_json()
-            print(error)
-            return JsonResponse({'error' : error}, safe=False)
+
+            context = {
+                'form': forms
+            }
+            
+            return render(request, 'transactions/add_outward.html', context)
+
+
 
 
     else:
@@ -482,10 +506,6 @@ def list_outward(request):
 
         data = data.filter(agent__name__icontains=agent_name)
 
-    company_data = company.objects.all()
-
-
-
     page = request.GET.get('page', 1)
     paginator = Paginator(data, 50)
 
@@ -501,7 +521,6 @@ def list_outward(request):
 
     context = {
         'data': data,
-        'company_data' : company_data,
         'year' : year
 
     }
@@ -1644,11 +1663,9 @@ def list_inward_delete(request):
 
     data = inward.objects.all()
 
-    inward_filter_data = inward_filter()
 
     context = {
         'data': data,
-        'filter_inward' : inward_filter_data
     }
 
     return render(request, 'delete/list_inward_delete.html', context)
@@ -1658,13 +1675,10 @@ def list_outward_delete(request):
 
     data = outward.objects.all()
 
-    outward_filter_data = outward_filter()
-
 
 
     context = {
         'data': data,
-        'filter_outward' : outward_filter_data
     }
 
     return render(request, 'delete/list_outward_delete.html', context)

@@ -52,38 +52,49 @@
 {% block content %}
 
 
-<div style="display:flex;margin-bottom : 20px;">
+<p>
     
-    <a href="{% url 'generate_report' %}"> <button class="btn btn-primary"> download </button> </a>
-
-    
-    <label style="color:black;margin-left: 50px;"> Godown </label>
-    
-    <select class="form-control" style="width:20%;" id="godown">
-        
-        {% if godown_id %}
-
-            <option>{{ godown_id }}</option>
-
-        {% else %}
-
-            <option>-------------</option>
-
-        {% endif %}
-
-        {% for i in godown_data %}
-      
-            <option value="{{ i.name }}">{{ i.name }}</option>
-
-        {% endfor %}
-      
-      </select>
-
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      Filters
+    </button>
+  </p>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body" style="width: fit-content;">
       
 
+        <form method="get" action="" style="padding:15px;">
+
+            {% csrf_token %}
+
+            <div class="form-group" style="display: flex;
+            gap: 14px;">
+
+            <label for="name" class="control-label mb-1" style="margin-left : 0px;">Godown</label>
+                    {{ stock_filter_data.form.godown }}
+                        
+                    
+                <label for="name" class="control-label mb-1" style="margin-left : 0px;">Category</label>
+                {{ stock_filter_data.form.company_goods }}
+                       
+                <label for="name" class="control-label mb-1">Size</label>
+                {{ stock_filter_data.form.goods_company }}
+            
+                
+                <label for="name" class="control-label mb-1 la">Total Bag</label>
+                {{ stock_filter_data.form.total_bag }}
+ 
+                
+                                            
+                    
+                </div>
+            
+            <br>
+          
+            <button class="btn btn-primary" type="submit" > Submit </button>
+
+        </form>
     </div>
-    
-  
+  </div>
 
 <div class="row">
     <div class="col-xl-12">

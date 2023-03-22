@@ -719,26 +719,19 @@ def delete_outward(request, outward_id):
         return HttpResponseRedirect(reverse('list_outward_delete'))
 
 
+from .filters import *
+
 @login_required(login_url='login')
 def list_stock(request):
 
+    data = stock.objects.all()
+    stock_filter_data = stock_filter(request.GET, queryset = data)
 
-    
 
-    godown_name = request.GET.get('godown_name')
-
-    if godown_name:
-
-        data = stock.objects.filter(godown__name = godown_name)
-
-    else:
-
-        data = stock.objects.all()
 
     context = {
-        'data': data,
-        'godown_id' : godown_name,
-        'godown_data' : godown.objects.all(),
+        'data': stock_filter_data.qs,
+        'stock_filter_data' : stock_filter_data
     }
 
     return render(request, 'transactions/list_stock.html', context)

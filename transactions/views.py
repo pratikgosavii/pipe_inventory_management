@@ -114,12 +114,7 @@ def add_inward(request):
                 print('--------------------------')
                 print('--------------------------')
 
-                context = {
-                    'form': forms
-                }
-               
-                return render(request, 'transactions/add_inward.html', context)
-
+                return redirect('add_inward')
 
 
             except stock.DoesNotExist:
@@ -412,12 +407,7 @@ def add_outward(request):
                     forms.save()
 
                     
-                    forms = outward_Form()
-
-                    context = {
-                        'form': forms
-                    }
-                    return render(request, 'transactions/add_outward.html', context)
+                    return redirect('add_outward')
 
 
                 else:
@@ -1294,7 +1284,6 @@ def generate_report_stock(request):
 
 
     data1.append('Godown')
-    data1.append('Company Name')
     data1.append('Category')
     data1.append('Size')
     data1.append('Quantity')
@@ -1307,18 +1296,10 @@ def generate_report_stock(request):
 
             data1 = []
 
-
-            print('(i.company.company_name')
-            print(i.company.company_name)
-
             data1.append(i.godown)
-            data1.append(i.company.company_name)
             data1.append(i.company_goods)
             data1.append(i.goods_company)
             data1.append(i.total_bag)
-
-
-
 
             data2.append(data1)
 

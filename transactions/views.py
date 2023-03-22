@@ -706,7 +706,7 @@ def delete_outward(request, outward_id):
     try:
         con = outward.objects.get(id = outward_id)
 
-        test = stock.objects.get(company = con.company, company_goods = con.company_goods, goods_company = con.goods_company)
+        test = stock.objects.get(company_goods = con.company_goods, goods_company = con.goods_company)
         test.total_bag = test.total_bag + con.bags
         test.save()
         con.delete()

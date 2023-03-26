@@ -105,6 +105,26 @@ def get_agent_company_ajax(request):
         return JsonResponse(list(agent_data.values('id', 'name')), safe = False) 
 
 
+@login_required(login_url='login')
+def get_category_ajax(request):
+
+    data = []
+    print('i am here2')
+
+    if request.method == "POST":
+        company_goods_id = request.POST['company_goods_id']
+        print(company_goods_id)
+        try:
+            company_goods_instance = goods_company.objects.filter(category__id = company_goods_id)
+            print(company_goods_instance)
+            
+         
+        except Exception:
+            data['error_message'] = 'error'
+            return JsonResponse(data)
+        return JsonResponse(list(company_goods_instance.values('id', 'goods_company_name')), safe = False) 
+
+
 
 @login_required(login_url='login')
 def add_godown(request):

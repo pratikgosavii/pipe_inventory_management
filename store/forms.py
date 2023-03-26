@@ -41,6 +41,10 @@ class goods_company_Form(forms.ModelForm):
         fields = '__all__'
         widgets = {
           
+          
+            'category': forms.Select(attrs={
+                'class': 'form-control', 'id': 'godown'
+            }),
             'goods_company_name': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'name'
             }),

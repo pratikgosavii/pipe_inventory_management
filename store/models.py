@@ -31,6 +31,7 @@ class company_goods(models.Model):
 
 class goods_company(models.Model):
     
+    category = models.ForeignKey(company_goods, on_delete=models.CASCADE)
     goods_company_name = models.CharField(max_length=120, unique=False)
 
     def __str__(self):

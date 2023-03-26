@@ -18,10 +18,10 @@ class inward_Form(forms.ModelForm):
                 'class': 'form-control', 'id': 'company'
             }),
             'company_goods': forms.Select(attrs={
-                'class': 'form-control', 'id': 'name'
+                'class': 'form-control', 'id': 'company_goods'
             }),
             'goods_company': forms.Select(attrs={
-                'class': 'form-control', 'id': 'pck_size'
+                'class': 'form-control', 'id': 'category'
             }),
             'employee_name': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'bag_size'
@@ -50,10 +50,10 @@ class outward_Form(forms.ModelForm):
                 'class': 'form-control', 'id': 'godown'
             }),
             'company_goods': forms.Select(attrs={
-                'class': 'form-control', 'id': 'name'
+                'class': 'form-control', 'id': 'company_goods'
             }),
             'goods_company': forms.Select(attrs={
-                'class': 'form-control', 'id': 'pck_size'
+                'class': 'form-control', 'id': 'category'
             }),
             'gate_pass_name': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'gate_pass_name'

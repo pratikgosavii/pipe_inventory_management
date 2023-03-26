@@ -9,11 +9,31 @@ from store.models import *
 @login_required(login_url='login')
 def dashboard(request):
 
-    godiwn_count = godown.objects.all().count()
+
+    godown_id = request.GET.get('godown_id')
+    godown_instance = godown.objects.first()
+
+    if godown_id:
+        print('--------------------------------')
+        request.session["gowdown"] = godown_id
+        godown_id = request.session["gowdown"] 
+
+        print(godown_id)
+
+        godown_instance = godown.objects.get(id = godown_id)
+
+    else:
+        godown_id = godown_instance.id
+        request.session["gowdown"] = godown_id
+
+    godown_data = godown.objects.all()
+    godiwn_count = godown_data.count()
     stock_count = stock.objects.all().count()
 
     context = {
         'godown' : godiwn_count,
+        'godown_instance' : godown_instance,
+        'godown_data' : godown_data,
         'stock' : stock_count
     }
     

@@ -21,7 +21,7 @@ class inward(models.Model):
     DC_date = models.DateField(auto_now_add=False)
 
     def __str__(self):
-        return self.company.company_name
+        return self.godown.name
 
    
 

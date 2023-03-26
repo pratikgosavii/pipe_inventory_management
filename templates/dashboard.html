@@ -14,6 +14,21 @@
     </button> </a><br><br> {% endcomment %}
 
     <!-- Widgets  -->
+    
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ godown_instance.name }}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+            {% for i in godown_data %}
+
+                <a class="dropdown-item" href="{% url 'dashboard' %}?godown_id={{ i.id }} ">{{ i.name }} </a>
+
+            {% endfor %}
+
+        </div>
+      </div>
     <div class="row">
         <div class="col-lg-3 col-md-6">
             <div class="card">

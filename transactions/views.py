@@ -331,18 +331,37 @@ def delete_inward(request, inward_id):
 def list_inward(request):
 
     year = request.GET.get('year')
+    godown_id = request.session['gowdown']
+    print('-----------------------')
+    print('-----------------------')
+    print('-----------------------')
+    print('-----------------------')
+    print('-----------------------')
+    print('-----------------------')
+    print('-----------------------')
+    print('-----------------------')
+    print('-----------------------')
+
+    print(godown_id)
+    
+    if godown_id == None:
+        godown_instance = godown.objects.first()
+        godown_id = godown_instance.id
+        request.session["gowdown"] = godown_id
+
 
     if year:
 
         date1 = str(int(year) - 1) + '-04-01'
         date2 = year + '-03-31'
-
-        data = inward.objects.filter(DC_date__range=[date1, date2])
+    
+        data = inward.objects.filter(DC_date__range=[date1, date2], godown__id = godown_id)
     
     else:
 
-        data = inward.objects.filter()
+        data = inward.objects.filter(godown__id = godown_id)
 
+        print(data)
 
 
     page = request.GET.get('page', 1)
@@ -477,17 +496,24 @@ def list_outward(request):
 
 
     year = request.GET.get('year')
+    godown_id = request.session['gowdown']
+
+    if godown_id == None:
+        godown_instance = godown.objects.first()
+        godown_id = godown_instance.id
+        request.session["gowdown"] = godown_id
+
 
     if year:
 
         date1 = str(int(year) - 1) + '-04-01'
         date2 = year + '-03-31'
 
-        data = outward.objects.filter(DC_date__range=[date1, date2])
+        data = outward.objects.filter(DC_date__range=[date1, date2], godown__id = godown_id)
     
     else:
 
-        data = outward.objects.filter().order_by('DC_number')
+        data = outward.objects.filter(godown__id = godown_id).order_by('DC_number')
 
 
     agent_name = request.GET.get('agent_name')
@@ -724,11 +750,21 @@ from .filters import *
 @login_required(login_url='login')
 def list_stock(request):
 
-    data = stock.objects.all()
+    godown_id = request.session['gowdown']
+
+    data = stock.objects.filter(godown__id = godown_id)
     stock_filter_data = stock_filter(request.GET, queryset = data)
 
-
-
+    print('-------------------------')
+    print('-------------------------')
+    print('-------------------------')
+    print('-------------------------')
+    print('-------------------------')
+    print('-------------------------')
+    print('-------------------------')
+    print('-------------------------')
+    print('-------------------------')
+    print(godown_id)
     context = {
         'data': stock_filter_data.qs,
         'stock_filter_data' : stock_filter_data

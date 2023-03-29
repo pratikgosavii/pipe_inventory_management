@@ -76,6 +76,7 @@
                         <thead>
                             <tr>
                                 <th class="serial">#</th>
+                                <th>Godown</th>
                                 <th>Catergoy</th>
                                 <th>Size</th>
                                 <th>Dc Number</th>
@@ -95,6 +96,7 @@
                             <tr>
                                 <input type="hidden" value="{{ i.id }}">
                                 <td class="serial">{{ forloop.counter }}</td>
+                                <td>{{ i.godown.name }}</td>
                                 <td>{{ i.company_goods.name }}</td>
                                 <td>{{ i.goods_company.goods_company_name }}</td>
                                 <td>{{ i.DC_number }}</td>

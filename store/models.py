@@ -22,6 +22,7 @@ class godown(models.Model):
 
 class company_goods(models.Model):
 
+    godown = models.ForeignKey(godown, on_delete=models.CASCADE)
     name = models.CharField(max_length=120, unique=False)
     
     

@@ -120,19 +120,33 @@ def add_inward(request):
             except stock.DoesNotExist:
 
                 test = stock.objects.create(godown = g, company_goods = b, goods_company = c, total_bag = e)
-                
+                godown_id = request.session['gowdown']
+                godown_instance = godown.objects.get(id = godown_id)
+                company_goods_data = company_goods.objects.filter(godown = godown_instance)
 
                 context = {
-                    'form': forms
+                    'form': forms,
+                    'godown_instance' : godown_instance,
+                    'company_goods_data' : company_goods_data
+
+
                 }
                
                 return render(request, 'transactions/add_inward.html', context)
 
 
         else:
-                
+
+            godown_id = request.session['gowdown']
+            godown_instance = godown.objects.get(id = godown_id)
+            company_goods_data = company_goods.objects.filter(godown = godown_instance)
+
+            print(godown_instance)
             context = {
-                'form': forms
+                'form': forms,
+                'godown_instance' : godown_instance,
+                'company_goods_data' : company_goods_data
+
             }
             
             return render(request, 'transactions/add_inward.html', context)
@@ -142,9 +156,18 @@ def add_inward(request):
     else:
 
         forms = inward_Form()
+
+        godown_id = request.session['gowdown']
+        godown_instance = godown.objects.get(id = godown_id)
+        print(godown_instance)
+
+        company_goods_data = company_goods.objects.filter(godown = godown_instance)
              
         context = {
-            'form': forms
+            'form': forms,
+            'godown_instance' : godown_instance,
+            'company_goods_data' : company_goods_data
+
         }
         
         return render(request, 'transactions/add_inward.html', context)
@@ -432,9 +455,12 @@ def add_outward(request):
                 else:
 
                     messages.error(request, 'Outward is more than stock')
-                
+                    godown_id = request.session['gowdown']
+                    godown_instance = godown.objects.get(id = godown_id)
+
                     context = {
-                        'form': forms
+                        'form': forms,
+                        'godown_instance': godown_instance
                     }
                     return render(request, 'transactions/add_outward.html', context)
 
@@ -443,9 +469,15 @@ def add_outward(request):
             except stock.DoesNotExist:
                
                 messages.error(request,"no stock in inverntory")
+                godown_id = request.session['gowdown']
+                godown_instance = godown.objects.get(id = godown_id)
+                company_goods_data = company_goods.objects.filter(godown = godown_instance)
 
                 context = {
-                    'form': forms
+                    'form': forms,
+                    'godown_instance': godown_instance,
+                    'company_goods_data': company_goods_data
+
                 }
                
                 return render(request, 'transactions/add_outward.html', context)
@@ -453,8 +485,16 @@ def add_outward(request):
 
         else:
 
+            
+            godown_id = request.session['gowdown']
+            godown_instance = godown.objects.get(id = godown_id)
+            company_goods_data = company_goods.objects.filter(godown = godown_instance)
+
             context = {
-                'form': forms
+                'form': forms,
+                'godown_instance': godown_instance,
+                'company_goods_data': company_goods_data
+
             }
             
             return render(request, 'transactions/add_outward.html', context)
@@ -466,8 +506,16 @@ def add_outward(request):
 
         forms = outward_Form()
 
+        godown_id = request.session['gowdown']
+        godown_instance = godown.objects.get(id = godown_id)
+        company_goods_data = company_goods.objects.filter(godown = godown_instance)
+
+
         context = {
-            'form': forms
+            'form': forms,
+            'godown_instance': godown_instance,
+            'company_goods_data': company_goods_data
+
         }
         return render(request, 'transactions/add_outward.html', context)
 

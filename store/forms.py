@@ -22,7 +22,9 @@ class company_goods_Form(forms.ModelForm):
         model = company_goods
         fields = '__all__'
         widgets = {
-          
+            'godown': forms.Select(attrs={
+                'class': 'form-control', 'id': 'godown'
+            }),
             'name': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'name'
             }),
@@ -43,7 +45,7 @@ class goods_company_Form(forms.ModelForm):
           
           
             'category': forms.Select(attrs={
-                'class': 'form-control', 'id': 'godown'
+                'class': 'form-control', 'id': 'categoryyy'
             }),
             'goods_company_name': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'name'

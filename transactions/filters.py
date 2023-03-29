@@ -11,15 +11,6 @@ from .forms import *
 
 class stock_filter(django_filters.FilterSet):
 
-    godown = django_filters.ModelChoiceFilter(
-        queryset=godown.objects.all(),
-        widget=forms.Select(
-            attrs={
-                'class' : 'form-control',
-                'id' : 'company'
-            })
-    )
-
     company_goods = django_filters.ModelChoiceFilter(
         queryset=company_goods.objects.all(),
         widget=forms.Select(

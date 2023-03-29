@@ -56,19 +56,26 @@
     <div class="card card-body" style="width: fit-content;">
       
 
-        <form method="get" action="" style="padding:15px;">
+        <form method="get" action="{% url 'generate_report' %}" style="padding:15px;">
 
             {% csrf_token %}
 
             <div class="form-group" style="display: flex;
             gap: 14px;">
-
-            <label for="name" class="control-label mb-1" style="margin-left : 0px;">Godown</label>
-                    {{ stock_filter_data.form.godown }}
-                        
+   
                     
                 <label for="name" class="control-label mb-1" style="margin-left : 0px;">Category</label>
-                {{ stock_filter_data.form.company_goods }}
+                <select name="company_goods" class="form-control" id="company_goods" required="">
+                    <option value="" selected="">---------</option>
+                  
+                    {% for i in company_goods_data %}
+
+                        <option value="{{ i.id }}">{{ i.name }}</option>
+
+                    {% endfor %}
+                  
+                  
+                  </select>
                        
                 <label for="name" class="control-label mb-1">Size</label>
                 {{ stock_filter_data.form.goods_company }}
@@ -137,41 +144,25 @@
 </div>
 
 
+{% endblock content %}
+
+{% block js %}
 
 <script>
     
    
 
-    $("#company").change(function () {
-        const comapnyID = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-        $.ajax({                       // initialize an AJAX request
-            type: "POST",
-            url: '{% url "get_company_goods_ajax" %}',
-            data: {
-                'company_id': comapnyID,       // add the country id to the POST parameters
-                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-            },
-            success: function (data) {   // `data` is from `get_topics_ajax` view function
-                let html_data = '<option value="" selected disabled>------------</option>';
-                data.forEach(function (data) {
-            
-                    html_data += `<option value="${data.id}" >${data.name}</option>` 
-                });
-                $("#company_goods").html(html_data); // replace the contents of the topic input with the data that came from the server
-            }
-        });
-    });
 
+
+
+    
     $("#company_goods").change(function () {
-        const comapny_goods_ID = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-        var e = document.getElementById("company");
-        var comapnyID = e.value;
+        const company_goodsID = $(this).val();  // get the selected subject ID from the HTML dropdown list 
         $.ajax({                       // initialize an AJAX request
             type: "POST",
-            url: '{% url "get_goods_company_ajax" %}',
+            url: '{% url "get_category_ajax" %}',
             data: {
-                'company_id': comapnyID, 
-                'company_goods': comapny_goods_ID,       // add the country id to the POST parameters
+                'company_goods_id': company_goodsID,       // add the country id to the POST parameters
                 'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
             },
             success: function (data) {   // `data` is from `get_topics_ajax` view function
@@ -180,44 +171,15 @@
             
                     html_data += `<option value="${data.id}" >${data.goods_company_name}</option>` 
                 });
-                $("#goods_company").html(html_data); // replace the contents of the topic input with the data that came from the server
+                $("#company").html(html_data); // replace the contents of the topic input with the data that came from the server
             }
         });
     });
-
-
-    $("#company").change(function () {
-        const comapnyID = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-        $.ajax({                       // initialize an AJAX request
-            type: "POST",
-            url: '{% url "get_agent_company_ajax" %}',
-            data: {
-                'company_id': comapnyID,       // add the country id to the POST parameters
-                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-            },
-            success: function (data) {   // `data` is from `get_topics_ajax` view function
-                let html_data = '<option value="" selected disabled>------------</option>';
-                data.forEach(function (data) {
-            
-                    html_data += `<option value="${data.id}" >${data.name}</option>` 
-                });
-                $("#agent").html(html_data); // replace the contents of the topic input with the data that came from the server
-            }
-        });
-    });
-
-
-        
-    $('#godown').change(function(){
-        url = window.location.href
-        url = url.split('?')[0] 
-        url = url + '?godown_name=' + $(this).val()
-        location.href = url;
-    })
 
     
 </script>
 
 
 
-{% endblock content %}
+
+{% endblock js %}

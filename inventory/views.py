@@ -13,7 +13,7 @@ def dashboard(request):
     godown_id = request.GET.get('godown_id')
     godown_instance = godown.objects.first()
 
-    session_godown = request.session["gowdown"]
+    session_godown = request.session.get("gowdown")
 
     if godown_id:
         print('--------------------------------')
@@ -25,7 +25,7 @@ def dashboard(request):
         godown_instance = godown.objects.get(id = godown_id)
     elif session_godown != None:
         godown_instance = godown.objects.get(id = session_godown)
-        
+
     else:
         godown_id = godown_instance.id
         request.session["gowdown"] = godown_id

@@ -77,6 +77,15 @@ def demo(request):
 def add_inward(request):
 
 
+
+    godown_id = request.session.get('gowdown')
+     
+    if godown_id == None:
+        godown_instance = godown.objects.first()
+        godown_id = godown_instance.id
+        request.session["gowdown"] = godown_id
+
+
     if request.method == 'POST':
 
         forms = inward_Form(request.POST)
@@ -120,7 +129,6 @@ def add_inward(request):
             except stock.DoesNotExist:
 
                 test = stock.objects.create(godown = g, company_goods = b, goods_company = c, total_bag = e)
-                godown_id = request.session['gowdown']
                 godown_instance = godown.objects.get(id = godown_id)
                 company_goods_data = company_goods.objects.filter(godown = godown_instance)
 
@@ -137,7 +145,6 @@ def add_inward(request):
 
         else:
 
-            godown_id = request.session['gowdown']
             godown_instance = godown.objects.get(id = godown_id)
             company_goods_data = company_goods.objects.filter(godown = godown_instance)
 
@@ -157,7 +164,6 @@ def add_inward(request):
 
         forms = inward_Form()
 
-        godown_id = request.session['gowdown']
         godown_instance = godown.objects.get(id = godown_id)
         print(godown_instance)
 
@@ -355,15 +361,7 @@ def list_inward(request):
 
     year = request.GET.get('year')
     godown_id = request.session['gowdown']
-    print('-----------------------')
-    print('-----------------------')
-    print('-----------------------')
-    print('-----------------------')
-    print('-----------------------')
-    print('-----------------------')
-    print('-----------------------')
-    print('-----------------------')
-    print('-----------------------')
+   
 
     print(godown_id)
     
@@ -410,6 +408,15 @@ import json
 @login_required(login_url='login')
 def add_outward(request):
 
+
+    godown_id = request.session.get('gowdown')
+     
+    if godown_id == None:
+        godown_instance = godown.objects.first()
+        godown_id = godown_instance.id
+        request.session["gowdown"] = godown_id
+
+
     if request.method == 'POST':
 
         forms = outward_Form(request.POST)
@@ -455,7 +462,6 @@ def add_outward(request):
                 else:
 
                     messages.error(request, 'Outward is more than stock')
-                    godown_id = request.session['gowdown']
                     godown_instance = godown.objects.get(id = godown_id)
 
                     context = {
@@ -469,7 +475,6 @@ def add_outward(request):
             except stock.DoesNotExist:
                
                 messages.error(request,"no stock in inverntory")
-                godown_id = request.session['gowdown']
                 godown_instance = godown.objects.get(id = godown_id)
                 company_goods_data = company_goods.objects.filter(godown = godown_instance)
 
@@ -486,7 +491,6 @@ def add_outward(request):
         else:
 
             
-            godown_id = request.session['gowdown']
             godown_instance = godown.objects.get(id = godown_id)
             company_goods_data = company_goods.objects.filter(godown = godown_instance)
 
@@ -506,7 +510,6 @@ def add_outward(request):
 
         forms = outward_Form()
 
-        godown_id = request.session['gowdown']
         godown_instance = godown.objects.get(id = godown_id)
         company_goods_data = company_goods.objects.filter(godown = godown_instance)
 
@@ -798,24 +801,28 @@ from .filters import *
 @login_required(login_url='login')
 def list_stock(request):
 
-    godown_id = request.session['gowdown']
+    godown_id = request.session.get('gowdown')
+     
+    if godown_id == None:
+        godown_instance = godown.objects.first()
+        godown_id = godown_instance.id
+        request.session["gowdown"] = godown_id
+
+
 
     data = stock.objects.filter(godown__id = godown_id)
     stock_filter_data = stock_filter(request.GET, queryset = data)
 
-    print('-------------------------')
-    print('-------------------------')
-    print('-------------------------')
-    print('-------------------------')
-    print('-------------------------')
-    print('-------------------------')
-    print('-------------------------')
-    print('-------------------------')
-    print('-------------------------')
+
+    company_goods_data = company_goods.objects.filter(godown__id = godown_id)
+    print('----------------')
+
     print(godown_id)
+    print(company_goods_data)
     context = {
         'data': stock_filter_data.qs,
-        'stock_filter_data' : stock_filter_data
+        'stock_filter_data' : stock_filter_data,
+        'company_goods_data' : company_goods_data
     }
 
     return render(request, 'transactions/list_stock.html', context)
@@ -1345,17 +1352,18 @@ def report_supply_return(request):
 @login_required(login_url='login')
 def generate_report_stock(request):
 
-    godown_name = request.GET.get('godown_name')
-
-    if godown_name:
-
-        data_stock = stock.objects.filter(godown__name = godown_name)
-
-    else:
-
-        data_stock = stock.objects.all()
+    godown_id = request.session.get('gowdown')
+     
+    if godown_id == None:
+        godown_instance = godown.objects.first()
+        godown_id = godown_instance.id
+        request.session["gowdown"] = godown_id
 
 
+    data_stock = stock.objects.filter(godown__id = godown_id)
+
+    stock_filter_data = stock_filter(request.GET, queryset = data_stock)
+    
     data1 = []
     data2 = []
 
@@ -1367,9 +1375,9 @@ def generate_report_stock(request):
     data2.append(data1)
 
 
-    if data_stock:
+    if stock_filter_data.qs:
 
-        for i in data_stock:
+        for i in stock_filter_data.qs:
 
             data1 = []
 
@@ -1395,15 +1403,17 @@ def generate_report_stock(request):
         writer.writerows(data2)
 
     link = os.path.join(BASE_DIR) + '\static\csv\\' + name
+    company_goods_data = company_goods.objects.filter(godown__id = godown_id)
 
-    with open(link, 'r' ) as fh:
-        mime_type  = mimetypes.guess_type(link)
-        print('--------------------')
-        print(mime_type)
-        response = HttpResponse(fh.read(), content_type=mime_type)
-        response['Content-Disposition'] = 'attachment;filename=' + str(link)
+    context = {
+        'data': stock_filter_data.qs,
+        'stock_filter_data' : stock_filter_data,
+        'company_goods_data' : company_goods_data,
+        'link' : link
+    }
 
-        return response
+    return render(request, 'report/stock_report.html', context)
+
 
 @login_required(login_url='login')
 def generate_report_main(request):

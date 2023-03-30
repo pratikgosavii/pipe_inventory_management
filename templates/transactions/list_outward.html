@@ -37,6 +37,77 @@
    
 </div><br>
 
+<p>
+    
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      Filters
+    </button>
+  </p>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body" style="width: fit-content;">
+      
+
+        <form method="get" action="" style="padding:15px;">
+
+            {% csrf_token %}
+
+            <div class="form-group" style="display: flex;
+            gap: 14px;">
+   
+                    
+                <label for="name" class="control-label mb-1" style="margin-left : 0px;">Category</label>
+                <select name="company_goods" class="form-control" id="company_goods" required="">
+                    <option value="" selected="">---------</option>
+                  
+                    {% for i in company_goods_data %}
+
+                        <option value="{{ i.id }}">{{ i.name }}</option>
+
+                    {% endfor %}
+                  
+                  
+                  </select>
+                       
+                <label for="name" class="control-label mb-1">Size</label>
+                {{ outward_filter.form.goods_company }}
+            
+                
+                <label for="name" class="control-label mb-1 la">Total Bag</label>
+                {{ outward_filter.form.total_bag }}
+ 
+                <label for="name" class="control-label mb-1" style="margin-left : 0px;">Builty Date From</label>
+                {{ outward_filter.form.DC_date_start__date }}
+            
+    
+    
+            <label for="name" class="control-label mb-1">Builty Date To</label>
+            {{ outward_filter.form.DC_date_end__date }}
+    
+    
+                                            
+                    
+                </div>
+            
+            <br>
+          
+            <button class="btn btn-primary" type="submit" > Submit </button>
+
+        </form>
+    </div>
+  </div>
+
+  
+  <form method="post" action="{% url 'download' %}">
+
+    {% csrf_token %}
+
+    <input type="hidden" value="{{ link }}" name="link">
+    <button class="btn btn-primary" type="submit">
+        Download Report
+    </button> 
+</form>
+
+
 <div style="display:flex;margin-bottom : 20px;">
     
     
@@ -188,37 +259,13 @@
 <script>
     
    
-
-    $("#company").change(function () {
-        const comapnyID = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-        $.ajax({                       // initialize an AJAX request
-            type: "POST",
-            url: '{% url "get_company_goods_ajax" %}',
-            data: {
-                'company_id': comapnyID,       // add the country id to the POST parameters
-                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-            },
-            success: function (data) {   // `data` is from `get_topics_ajax` view function
-                let html_data = '<option value="" selected disabled>------------</option>';
-                data.forEach(function (data) {
-            
-                    html_data += `<option value="${data.id}" >${data.name}</option>` 
-                });
-                $("#company_goods").html(html_data); // replace the contents of the topic input with the data that came from the server
-            }
-        });
-    });
-
     $("#company_goods").change(function () {
-        const comapny_goods_ID = $(this).val();  // get the selected subject ID from the HTML dropdown list 
-        var e = document.getElementById("company");
-        var comapnyID = e.value;
+        const company_goodsID = $(this).val();  // get the selected subject ID from the HTML dropdown list 
         $.ajax({                       // initialize an AJAX request
             type: "POST",
-            url: '{% url "get_goods_company_ajax" %}',
+            url: '{% url "get_category_ajax" %}',
             data: {
-                'company_id': comapnyID, 
-                'company_goods': comapny_goods_ID,       // add the country id to the POST parameters
+                'company_goods_id': company_goodsID,       // add the country id to the POST parameters
                 'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
             },
             success: function (data) {   // `data` is from `get_topics_ajax` view function
@@ -232,8 +279,7 @@
         });
     });
 
-
-
+    
 
     
     $('#year').change(function(){

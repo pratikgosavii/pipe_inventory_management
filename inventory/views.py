@@ -12,6 +12,15 @@ def dashboard(request):
 
     godown_id = request.GET.get('godown_id')
     godown_instance = godown.objects.first()
+    print('--------------------------------')
+    print('--------------------------------')
+    print('--------------------------------')
+    print('--------------------------------')
+    print('--------------------------------')
+    print('--------------------------------')
+    print('--------------------------------')
+
+    print(godown_instance)
 
     session_godown = request.session.get("gowdown")
 

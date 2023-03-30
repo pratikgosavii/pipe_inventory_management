@@ -567,6 +567,54 @@ def list_outward(request):
         data = outward.objects.filter(godown__id = godown_id).order_by('DC_number')
 
 
+    outward_filter_data = outward_filter(request.GET, queryset = data)
+    
+    data1 = []
+    data2 = []
+
+
+    data1.append('Godown')
+    data1.append('Category')
+    data1.append('Size')
+    data1.append('DC number')
+    data1.append('Quantity')
+    data1.append('Employee name')
+    data1.append('Date')
+    data2.append(data1)
+
+
+    if outward_filter_data.qs:
+
+        for i in outward_filter_data.qs:
+
+            data1 = []
+
+            data1.append(i.godown)
+            data1.append(i.company_goods)
+            data1.append(i.goods_company)
+            data1.append(i.DC_number)
+            data1.append(i.bags)
+            data1.append(i.employee_name) 
+            data1.append(i.DC_date) 
+
+            data2.append(data1)
+
+            data1 = []
+
+
+
+    time =  str(datetime.now(ist))
+    time = time.split('.')
+    time = time[0].replace(':', '-')
+
+    name = "Report.csv"
+    path = os.path.join(BASE_DIR) + '\static\csv\\' + name
+    with open(path,  'w', newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(data2)
+
+    link = os.path.join(BASE_DIR) + '\static\csv\\' + name
+
     agent_name = request.GET.get('agent_name')
 
     if agent_name:
@@ -575,6 +623,7 @@ def list_outward(request):
 
     page = request.GET.get('page', 1)
     paginator = Paginator(data, 50)
+    company_goods_data = company_goods.objects.filter(godown__id = godown_id)
 
     try:
         data = paginator.page(page)
@@ -587,8 +636,12 @@ def list_outward(request):
 
 
     context = {
-        'data': data,
-        'year' : year
+        'data': outward_filter_data.qs,
+        'year' : year,
+        'link' : link,
+        'company_goods_data' : company_goods_data,
+        'outward_filter' : outward_filter
+
 
     }
 
@@ -652,7 +705,7 @@ def update_outward(request, outward_id):
                     
                     try:
                       
-                        test = stock.objects.get(company = company_instance, company_goods = company_goods_instance, goods_company = goods_company_instance)
+                        test = outward.objects.get(company = company_instance, company_goods = company_goods_instance, goods_company = goods_company_instance)
                       
 
                     except stock.DoesNotExist:

@@ -19,7 +19,7 @@ urlpatterns = [
     path('update-outward/<outward_id>', update_outward, name='update_outward'),
     path('list-outward/', list_outward, name='list_outward'),
 
-    path('list-stock/', list_stock, name='list_stock'),
+    path('list-stock/', generate_report_stock, name='list_stock'),
 
     path('report-daily/', generate_report_daily, name='report_daily'),
     path('report-inward/', report_inward, name='report_inward'),

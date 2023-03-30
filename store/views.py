@@ -182,7 +182,7 @@ def delete_godown(request, godown_id):
 
     godown.objects.get(id=godown_id).delete()
 
-    return HttpResponseRedirect(reverse('list_godown_delete'))
+    return HttpResponseRedirect(reverse('list_company_delete'))
 
 
         
@@ -624,10 +624,20 @@ def list_company_delete(request):
 
 
 @login_required(login_url='login')
+def list_godown_delete(request):
+    
+    data = godown.objects.all()
+    context = {
+            'data': data
+        }
+
+
+    return render(request, 'delete/list_godown_delete.html', context)
+
+@login_required(login_url='login')
 def list_company_goods_delete(request):
     
-    data = company_goods.objects.all().order_by('company__company_name')
-
+    data = company_goods.objects.all()
     context = {
             'data': data
         }
@@ -640,7 +650,7 @@ def list_company_goods_delete(request):
 @login_required(login_url='login')
 def list_goods_company_delete(request):
     
-    data = goods_company.objects.all().order_by('company_name__company_name')
+    data = goods_company.objects.all()
 
     context = {
             'data': data

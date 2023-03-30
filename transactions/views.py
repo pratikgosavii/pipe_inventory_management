@@ -332,7 +332,7 @@ def delete_inward(request, inward_id):
     try:
         con = inward.objects.filter(id = inward_id).first()
 
-        test = stock.objects.get(company_goods = con.company_goods, goods_company = con.goods_company)
+        test = stock.objects.get(godown = con.godown, company_goods = con.company_goods, goods_company = con.goods_company)
         if test.total_bag >= con.bags:
             test.total_bag = test.total_bag - con.bags
             test.save()
@@ -780,10 +780,13 @@ def update_outward(request, outward_id):
 @login_required(login_url='login')
 def delete_outward(request, outward_id):
 
+    a = stock.objects.all()
+    print(a)
+
     try:
         con = outward.objects.get(id = outward_id)
 
-        test = stock.objects.get(company_goods = con.company_goods, goods_company = con.goods_company)
+        test = stock.objects.get(godown = con.godown, company_goods = con.company_goods, goods_company = con.goods_company)
         test.total_bag = test.total_bag + con.bags
         test.save()
         con.delete()
@@ -791,8 +794,8 @@ def delete_outward(request, outward_id):
         return HttpResponseRedirect(reverse('list_outward_delete'))
 
 
-    except:
-        print('something went wrong')
+    except Exception as e:
+        print(e)
         return HttpResponseRedirect(reverse('list_outward_delete'))
 
 

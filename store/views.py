@@ -454,7 +454,7 @@ def list_goods_company(request):
         godown_id = godown_instance.id
         request.session["gowdown"] = godown_id
 
-    data = goods_company.objects.filter(godown__id = godown_id).order_by('goods_company_name')
+    data = goods_company.objects.filter(category__godown__id = godown_id).order_by('goods_company_name')
 
     context = {
             'data': data

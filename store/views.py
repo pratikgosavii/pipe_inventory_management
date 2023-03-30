@@ -292,8 +292,22 @@ def add_company_goods(request):
 
         forms = company_goods_Form()
 
+            
+        godown_id = request.session.get('gowdown')
+        
+        if godown_id == None:
+            godown_instance = godown.objects.first()
+            godown_id = godown_instance.id
+            request.session["gowdown"] = godown_id
+
+        else:
+
+            godown_instance = godown.objects.get(id = godown_id)
+
+
         context = {
-            'form': forms
+            'form': forms,
+            'godown_instance': godown_instance,
         }
 
         return render(request, 'store/add_company_goods.html', context)
@@ -339,8 +353,17 @@ def delete_company_goods(request, company_goods_id):
 
 @login_required(login_url='login')
 def list_company_goods(request):
+
     
-    data = company_goods.objects.all().order_by('name')
+    godown_id = request.session.get('gowdown')
+     
+    if godown_id == None:
+        godown_instance = godown.objects.first()
+        godown_id = godown_instance.id
+        request.session["gowdown"] = godown_id
+
+    
+    data = company_goods.objects.filter(godown__id = godown_id).order_by('name')
 
     context = {
             'data': data
@@ -368,10 +391,19 @@ def add_goods_company(request):
     else:
 
         forms = goods_company_Form()
-       
+        godown_id = request.session.get('gowdown')
+        
+        if godown_id == None:
+            godown_instance = godown.objects.first()
+            godown_id = godown_instance.id
+            request.session["gowdown"] = godown_id
 
+        company_goods_data = company_goods.objects.filter(godown__id = godown_id)
+
+        
         context = {
             'form': forms,
+            'company_goods_data': company_goods_data,
         }
 
         return render(request, 'store/add_goods_company.html', context)
@@ -415,7 +447,14 @@ def delete_goods_company(request, company_goods_id):
 @login_required(login_url='login')
 def list_goods_company(request):
     
-    data = goods_company.objects.all().order_by('goods_company_name')
+    godown_id = request.session.get('gowdown')
+     
+    if godown_id == None:
+        godown_instance = godown.objects.first()
+        godown_id = godown_instance.id
+        request.session["gowdown"] = godown_id
+
+    data = goods_company.objects.filter(godown__id = godown_id).order_by('goods_company_name')
 
     context = {
             'data': data

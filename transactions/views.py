@@ -85,6 +85,11 @@ def add_inward(request):
         godown_id = godown_instance.id
         request.session["gowdown"] = godown_id
 
+    else:
+
+        godown_instance = godown.objects.get(id = godown_id)
+
+
 
     if request.method == 'POST':
 
@@ -415,6 +420,9 @@ def add_outward(request):
         godown_instance = godown.objects.first()
         godown_id = godown_instance.id
         request.session["gowdown"] = godown_id
+    
+    else:
+        godown_instance = godown.objects.get(id = godown_id)
 
 
     if request.method == 'POST':

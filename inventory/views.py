@@ -36,8 +36,11 @@ def dashboard(request):
         godown_instance = godown.objects.get(id = session_godown)
 
     else:
-        godown_id = godown_instance.id
-        request.session["gowdown"] = godown_id
+
+        if godown_instance:
+                
+            godown_id = godown_instance.id
+            request.session["gowdown"] = godown_id
 
     godown_data = godown.objects.all()
     godiwn_count = godown_data.count()

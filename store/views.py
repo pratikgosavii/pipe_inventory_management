@@ -182,6 +182,8 @@ def delete_godown(request, godown_id):
 
     godown.objects.get(id=godown_id).delete()
 
+    request.session['godown'] = None
+
     return HttpResponseRedirect(reverse('list_company_delete'))
 
 

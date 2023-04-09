@@ -37,6 +37,77 @@
 
 </div><br>
 
+
+
+<p>
+    
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      Filters
+    </button>
+  </p>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-body" style="width: fit-content;">
+      
+
+        <form method="get" action="" style="padding:15px;">
+
+            {% csrf_token %}
+
+            <div class="form-group" style="display: flex;
+            gap: 14px;">
+   
+                    
+                <label for="name" class="control-label mb-1" style="margin-left : 0px;">Category</label>
+                <select name="company_goods" class="form-control" id="company_goods" required="">
+                    <option value="" selected="">---------</option>
+                  
+                    {% for i in company_goods_data %}
+
+                        <option value="{{ i.id }}">{{ i.name }}</option>
+
+                    {% endfor %}
+                  
+                  
+                  </select>
+                       
+                <label for="name" class="control-label mb-1">Size</label>
+                {{ outward_filter.form.goods_company }}
+            
+            
+                <label for="name" class="control-label mb-1" style="margin-left : 0px;">Builty Date From</label>
+                {{ outward_filter.form.DC_date_start__date }}
+            
+    
+    
+            <label for="name" class="control-label mb-1">Builty Date To</label>
+            {{ outward_filter.form.DC_date_end__date }}
+    
+    
+                                            
+                    
+                </div>
+            
+            <br>
+          
+            <button class="btn btn-primary" type="submit" > Submit </button>
+
+        </form>
+    </div>
+  </div>
+
+  
+  <form method="post" action="{% url 'download' %}">
+
+    {% csrf_token %}
+
+    <input type="hidden" value="{{ link }}" name="link">
+    <button class="btn btn-primary" type="submit">
+        Download Report
+    </button> 
+</form>
+
+
+
 <div style="display:flex;margin-bottom : 20px;">
  
     <label style="color:black;margin-left: 50px;"> Bussiness Year </label>

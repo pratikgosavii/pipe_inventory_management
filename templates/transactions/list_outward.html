@@ -160,6 +160,8 @@
                                 <th>DC number</th>
                                 <th>Total Packet</th>
                                 <th>Employee Name</th>
+                                <th>Buyer Name</th>
+                                <th>Mobile No</th>
 
                                 <th>Date</th>
                                 {% comment %} <th>Transport</th>
@@ -182,6 +184,8 @@
                                 <td>{{ i.DC_number }}</td>
                                 <td>{{ i.bags }}</td>
                                 <td>{{ i.employee_name }}</td>
+                                <td>{{ i.gate_pass_name }}</td>
+                                <td>{{ i.mobile_no }}</td>
 
                                 <td style="min-width:128px;">{{ i.DC_date|date:"d M, Y" }}</td>
                                 {% comment %} <td>{{ i.transport }}</td>

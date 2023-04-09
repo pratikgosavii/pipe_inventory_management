@@ -381,14 +381,61 @@ def list_inward(request):
         date1 = str(int(year) - 1) + '-04-01'
         date2 = year + '-03-31'
     
-        data = inward.objects.filter(DC_date__range=[date1, date2], godown__id = godown_id)
+        data = inward.objects.filter(DC_date__range=[date1, date2], godown__id = godown_id).order_by("-id")
     
     else:
 
-        data = inward.objects.filter(godown__id = godown_id)
+        data = inward.objects.filter(godown__id = godown_id).order_by("-id")
 
         print(data)
 
+
+    outward_filter_data = outward_filter(request.GET, queryset = data)
+    
+    data1 = []
+    data2 = []
+
+
+    data1.append('Godown')
+    data1.append('Category')
+    data1.append('Size')
+    data1.append('DC number')
+    data1.append('Quantity')
+    data1.append('Date')
+    data2.append(data1)
+
+
+    if outward_filter_data.qs:
+
+        for i in outward_filter_data.qs:
+
+            data1 = []
+
+            data1.append(i.godown)
+            data1.append(i.company_goods)
+            data1.append(i.goods_company)
+            data1.append(i.DC_number)
+            data1.append(i.bags)
+            data1.append(i.DC_date) 
+
+            data2.append(data1)
+
+
+            data1 = []
+
+
+
+    time =  str(datetime.now(ist))
+    time = time.split('.')
+    time = time[0].replace(':', '-')
+
+    name = "Report.csv"
+    path = os.path.join(BASE_DIR) + '\static\csv\\' + name
+    with open(path,  'w', newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(data2)
+
+    link = os.path.join(BASE_DIR) + '\static\csv\\' + name
 
     page = request.GET.get('page', 1)
     paginator = Paginator(data, 50)
@@ -399,10 +446,16 @@ def list_inward(request):
         data = paginator.page(1)
     except EmptyPage:
         data = paginator.page(paginator.num_pages)
+    
+    company_goods_data = company_goods.objects.filter(godown__id = godown_id)
 
     context = {
-        'data': data,
-        'year' : year
+        'data': outward_filter_data.qs,
+        'year' : year,
+        'company_goods_data' : company_goods_data,
+        'outward_filter' : outward_filter(),
+        'link' : link,
+        
     }
 
     return render(request, 'transactions/list_inward.html', context)
@@ -568,11 +621,11 @@ def list_outward(request):
         date1 = str(int(year) - 1) + '-04-01'
         date2 = year + '-03-31'
 
-        data = outward.objects.filter(DC_date__range=[date1, date2], godown__id = godown_id)
+        data = outward.objects.filter(DC_date__range=[date1, date2], godown__id = godown_id).order_by("-id")
     
     else:
 
-        data = outward.objects.filter(godown__id = godown_id).order_by('DC_number')
+        data = outward.objects.filter(godown__id = godown_id).order_by('-id')
 
 
     outward_filter_data = outward_filter(request.GET, queryset = data)
@@ -587,6 +640,7 @@ def list_outward(request):
     data1.append('DC number')
     data1.append('Quantity')
     data1.append('Employee name')
+    data1.append('Buyer name')
     data1.append('Date')
     data2.append(data1)
 
@@ -603,9 +657,11 @@ def list_outward(request):
             data1.append(i.DC_number)
             data1.append(i.bags)
             data1.append(i.employee_name) 
+            data1.append(i.gate_pass_name) 
             data1.append(i.DC_date) 
 
             data2.append(data1)
+
 
             data1 = []
 

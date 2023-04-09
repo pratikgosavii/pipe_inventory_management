@@ -67,6 +67,12 @@ class outward_Form(forms.ModelForm):
             'DC_number': forms.TextInput(attrs={
                 'class': 'form-control', 'id': 'total_bag'
             }),
+            'name_of_buyer': forms.TextInput(attrs={
+                'class': 'form-control', 'id': 'total_bag'
+            }),
+            'mobile_no': forms.NumberInput(attrs={
+                'class': 'form-control', 'id': 'total_bag'
+            }),
 
             'DC_date': DateInput(attrs={ 'class': 'form-control', 'type': 'date'}, format = '%Y-%m-%d'),
             

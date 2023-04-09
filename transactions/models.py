@@ -33,6 +33,7 @@ class outward(models.Model):
     employee_name = models.CharField(max_length=50, null = True, blank = True)
     bags = models.BigIntegerField()
     DC_number = models.CharField(max_length=50)
+    mobile_no = models.IntegerField( null = True, blank = True)
     DC_date = models.DateField(auto_now_add=False)
 
 

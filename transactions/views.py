@@ -182,7 +182,6 @@ def update_inward(request, inward_id ):
 
         instance_inward = inward.objects.get(id = inward_id)
 
-        data_inward = instance_inward
 
         company_goods_id = request.POST.get('company_goods')
         goods_company_id = request.POST.get('goods_company')
@@ -192,7 +191,8 @@ def update_inward(request, inward_id ):
 
         if DC_date:
 
-            date_time = numOfDays(DC_date)
+            date_time = DC_date
+
         else:
             date_time = datetime.now(IST)
 
@@ -281,15 +281,14 @@ def update_inward(request, inward_id ):
         else:
         
             instance = inward.objects.get(id = inward_id)
-            comapny_goods_ID = forms.instance.company_goods.id
-            goods_company_ID = forms.instance.goods_company.id
-            agent_ID = forms.instance.agent.id
-
+            company_goods_id = forms.instance.company_goods.id
+            category_id = forms.instance.goods_company.id
+            print('company_goods_id')
+            print(company_goods_id)
             context = {
                 'form': forms,
-                'comapny_goods_ID' : comapny_goods_ID,
-                'goods_company_ID' : goods_company_ID,
-                'agent_ID' : agent_ID
+                'company_goods_ID' : company_goods_id,
+                'category_ID' : category_id,
             }
             
 
@@ -303,16 +302,14 @@ def update_inward(request, inward_id ):
 
         instance = inward.objects.get(id = inward_id)
         forms = inward_Form(instance = instance)
-        comapny_goods_ID = forms.instance.company_goods.id
-        goods_company_ID = forms.instance.goods_company.id
-        agent_ID = forms.instance.agent.id
-
+        company_goods_id = forms.instance.company_goods.id
+        category_id = forms.instance.goods_company.id
+        print('company_goods_id')
+        print(company_goods_id)
         context = {
             'form': forms,
-            'comapnyID' : comapnyID,
-            'comapny_goods_ID' : comapny_goods_ID,
-            'goods_company_ID' : goods_company_ID,
-            'agent_ID' : agent_ID
+            'company_goods_ID' : company_goods_id,
+            'category_ID' : category_id,
         }
         return render(request, 'transactions/update_inward.html', context)
 
@@ -632,7 +629,7 @@ def list_outward(request):
             data1.append(i.godown.name)
             data1.append(i.company_goods.name)
             data1.append(i.goods_company.goods_company_name)
-            data1.append(i.dealer.name)
+            data1.append(i.dealer)
             data1.append(i.DC_number)
             data1.append(i.bags)
             data1.append(i.employee_name) 
@@ -700,7 +697,6 @@ def update_outward(request, outward_id):
         company_goods_id = request.POST.get('company_goods')
         goods_company_id = request.POST.get('goods_company')
 
-        company_instance = company.objects.get(id = company_id) 
         company_goods_instance = company_goods.objects.get(id = company_goods_id) 
         goods_company_instance = goods_company.objects.get(id = goods_company_id) 
 
@@ -712,7 +708,8 @@ def update_outward(request, outward_id):
 
         if DC_date:
 
-            date_time = numOfDays(DC_date)
+            date_time = DC_date
+
         else:
             date_time = datetime.now(IST)
 
@@ -733,12 +730,12 @@ def update_outward(request, outward_id):
                     
                     try:
                       
-                        test = outward.objects.get(company = company_instance, company_goods = company_goods_instance, goods_company = goods_company_instance)
+                        test = outward.objects.get(company_goods = company_goods_instance, goods_company = goods_company_instance)
                       
 
                     except stock.DoesNotExist:
                         test = None
-                        stock.objects.create(company = company_instance, company_goods = company_goods_instance, goods_company = goods_company_instance, total_bag =  int(bags))
+                        stock.objects.create(company_goods = company_goods_instance, goods_company = goods_company_instance, total_bag =  int(bags))
 
 
                     if test.total_bag >= int(bags):
@@ -763,7 +760,7 @@ def update_outward(request, outward_id):
 
                     if instance.bags != int(bags):
                         
-                        test = stock.objects.get(company = company_instance, company_goods = company_goods_instance, goods_company = goods_company_instance)
+                        test = stock.objects.get(company_goods = company_goods_instance, goods_company = goods_company_instance)
                         
                         add_stock = None
                         minus_stock = None
@@ -813,16 +810,13 @@ def update_outward(request, outward_id):
            
             comapnyID = forms.instance.company.id
             comapny_goods_ID = forms.instance.company_goods.id
-            goods_company_ID = forms.instance.goods_company.id
-            agent_ID = forms.instance.agent.id
-
-                
+            category_id = forms.instance.goods_company.id
+          
             context = {
                 'form':  forms,
                 'comapnyID' : comapnyID,
                 'comapny_goods_ID' : comapny_goods_ID,
-                'goods_company_ID' : goods_company_ID,
-                'agent_ID' : agent_ID
+                'category_ID' : category_id,
             }
 
             return render(request, 'transactions/update_outward.html', context)
@@ -833,18 +827,16 @@ def update_outward(request, outward_id):
 
         instance = outward.objects.get(id = outward_id)
         forms = outward_Form(instance = instance)
-        comapnyID = forms.instance.company.id
         comapny_goods_ID = forms.instance.company_goods.id
-        goods_company_ID = forms.instance.goods_company.id
-        agent_ID = forms.instance.agent.id
-
+        category_id = forms.instance.goods_company.id
+          
         context = {
-            'form': forms,
+            'form':  forms,
             'comapnyID' : comapnyID,
             'comapny_goods_ID' : comapny_goods_ID,
-            'goods_company_ID' : goods_company_ID,
-            'agent_ID' : agent_ID
+            'category_ID' : category_id,
         }
+
         return render(request, 'transactions/update_outward.html', context)
 
 

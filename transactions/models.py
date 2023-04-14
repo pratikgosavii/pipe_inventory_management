@@ -30,6 +30,7 @@ class outward(models.Model):
     godown = models.ForeignKey(godown , on_delete=models.CASCADE, related_name='fgv')
     company_goods = models.ForeignKey(company_goods , on_delete=models.CASCADE, related_name='fd')
     goods_company = models.ForeignKey(goods_company , on_delete=models.CASCADE, related_name='cvg')
+    dealer = models.ForeignKey(dealer , on_delete=models.CASCADE, related_name='rtrtrtrg', null = True, blank = True)
     employee_name = models.CharField(max_length=50, null = True, blank = True)
     bags = models.BigIntegerField()
     DC_number = models.CharField(max_length=50)
@@ -50,7 +51,7 @@ class stock(models.Model):
     company_goods = models.ForeignKey(company_goods , on_delete=models.CASCADE, related_name='fsdsdd')
     goods_company = models.ForeignKey(goods_company , on_delete=models.CASCADE, related_name='csdsvg')
     total_bag = models.BigIntegerField()
-    
+    updated_at = models.DateTimeField(auto_now=True)
 
     
 

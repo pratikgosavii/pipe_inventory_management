@@ -16,6 +16,11 @@ urlpatterns = [
     path('delete-godown/<godown_id>', delete_godown, name='delete_godown'),
     path('list-godown/', list_godown, name='list_godown'),
 
+    path('add-dealer/', add_dealer, name='add_dealer'),
+    path('update-dealer/<dealer_id>', update_dealer, name='update_dealer'),
+    path('delete-dealer/<dealer_id>', delete_dealer, name='delete_dealer'),
+    path('list-dealer/', list_dealer, name='list_dealer'),
+
     path('add-company/', add_company, name='add_company'),
     path('update-company/<company_id>', update_company, name='update_company'),
     path('delete-company/<company_id>', delete_company, name='delete_company'),

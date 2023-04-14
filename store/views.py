@@ -37,8 +37,6 @@ def numOfDays(date1):
 
     date1 = datetime(year,month, day, tzinfo=ist)
 
-    print('--------------')
-    print(date1)
     return date1
 
 
@@ -50,12 +48,9 @@ def get_company_goods_ajax(request):
 
     if request.method == "POST":
         company_id = request.POST['company_id']
-        print('----here----')
-        print(company_id)
         try:
             instance = company.objects.filter(id = company_id).first()
             dropdown1 = company_goods.objects.filter(company = instance)
-            print(dropdown1)
         except Exception:
             data['error_message'] = 'error'
             return JsonResponse(data)
@@ -66,18 +61,14 @@ def get_company_goods_ajax(request):
 def get_goods_company_ajax(request):
 
     data = []
-    print('i am here3')
 
     if request.method == "POST":
         company_id = request.POST['company_id']
         company_goods_id = request.POST['company_goods']
-        print(company_id)
         try:
             company_instance = company.objects.get(id= company_id)
             instance = company_goods.objects.filter(id = company_goods_id).first()
-            print(instance)
             dropdown1 = goods_company.objects.filter(company_goods = instance, company_name= company_instance)
-            print(dropdown1)
         except Exception:
             data['error_message'] = 'error'
             return JsonResponse(data)
@@ -199,6 +190,81 @@ def list_godown(request):
     }
 
     return render(request, 'store/list_godown.html', context)
+
+
+@login_required(login_url='login')
+def add_dealer(request):
+
+    if request.method == 'POST':
+
+        forms = dealer_Form(request.POST)
+
+        if forms.is_valid():
+            forms.save()
+            return redirect('list_dealer')
+        else:
+            print(forms.errors)
+    
+    else:
+
+        forms = dealer_Form()
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'store/add_dealer.html', context)
+
+        
+
+@login_required(login_url='login')
+def update_dealer(request, dealer_id):
+
+    if request.method == 'POST':
+
+        instance = dealer.objects.get(id=dealer_id)
+
+        forms = dealer_Form(request.POST, instance=instance)
+
+        if forms.is_valid():
+            forms.save()
+            return redirect('list_dealer')
+        else:
+            print(forms.errors)
+    
+    else:
+
+        instance = dealer.objects.get(id=dealer_id)
+        forms = dealer_Form(instance=instance)
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'store/add_dealer.html', context)
+
+        
+
+@login_required(login_url='login')
+def delete_dealer(request, dealer_id):
+
+    dealer.objects.get(id=dealer_id).delete()
+
+    request.session['dealer'] = None
+
+    return HttpResponseRedirect(reverse('list_company_delete'))
+
+
+        
+
+@login_required(login_url='login')
+def list_dealer(request):
+
+    data = dealer.objects.all()
+
+    context = {
+        'data': data
+    }
+
+    return render(request, 'store/list_dealer.html', context)
 
 
 

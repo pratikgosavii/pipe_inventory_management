@@ -28,6 +28,16 @@ class stock_filter(django_filters.FilterSet):
                 'id' : 'company'
             })
     )
+
+    dealer = django_filters.ModelChoiceFilter(
+        queryset=dealer.objects.all(),
+        widget=forms.Select(
+            attrs={
+                'class' : 'form-control',
+                'id' : 'company'
+            })
+    )
+
     total_bag = django_filters.NumberFilter(
         widget=forms.Select(
             attrs={

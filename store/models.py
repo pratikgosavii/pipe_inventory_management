@@ -1,5 +1,6 @@
 from django.db import models
 
+
 from users.models import User
 from datetime import datetime, timezone
 
@@ -24,6 +25,17 @@ class company_goods(models.Model):
 
     godown = models.ForeignKey(godown, on_delete=models.CASCADE)
     name = models.CharField(max_length=120, unique=False)
+    
+    
+    def __str__(self):
+        return self.name
+
+
+class dealer(models.Model):
+
+    name = models.CharField(max_length=120, unique=False)
+    address = models.CharField(max_length=120, unique=False)
+    mobile_no = models.IntegerField()
     
     
     def __str__(self):

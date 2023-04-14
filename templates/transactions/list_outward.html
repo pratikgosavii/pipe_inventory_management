@@ -71,6 +71,10 @@
                 <label for="name" class="control-label mb-1">Size</label>
                 {{ outward_filter.form.goods_company }}
             
+
+                <label for="name" class="control-label mb-1">Size</label>
+                {{ outward_filter.form.dealer }}
+            
                 
                 <label for="name" class="control-label mb-1 la">Total Bag</label>
                 {{ outward_filter.form.total_bag }}
@@ -157,6 +161,7 @@
                                 <th>Godown</th>
                                 <th>Category</th>
                                 <th>Size</th>
+                                <th>Dealer</th>
                                 <th>DC number</th>
                                 <th>Total Packet</th>
                                 <th>Employee Name</th>
@@ -181,6 +186,7 @@
                                 <td>{{ i.godown.name }}</td>
                                 <td>{{ i.company_goods.name }}</td>
                                 <td>{{ i.goods_company.goods_company_name }}</td>
+                                <td>{{ i.dealer }}</td>
                                 <td>{{ i.DC_number }}</td>
                                 <td>{{ i.bags }}</td>
                                 <td>{{ i.employee_name }}</td>

@@ -100,12 +100,8 @@ def add_inward(request):
         if DC_date:
 
             date_time = DC_date
-            print('in if')
         else:
             date_time = datetime.now(IST)
-        print('-----------------------------------------------date_time')
-        print(date_time)
-        print('---------------------')
         updated_request = request.POST.copy()
         updated_request.update({'DC_date': date_time})
         forms = inward_Form(updated_request)
@@ -123,10 +119,6 @@ def add_inward(request):
 
                 test.total_bag = test.total_bag + e
                 test.save()
-
-                print('--------------------------')
-                print('--------------------------')
-                print('--------------------------')
 
                 return redirect('add_inward')
 
@@ -153,7 +145,6 @@ def add_inward(request):
             godown_instance = godown.objects.get(id = godown_id)
             company_goods_data = company_goods.objects.filter(godown = godown_instance)
 
-            print(godown_instance)
             context = {
                 'form': forms,
                 'godown_instance' : godown_instance,
@@ -170,7 +161,6 @@ def add_inward(request):
         forms = inward_Form()
 
         godown_instance = godown.objects.get(id = godown_id)
-        print(godown_instance)
 
         company_goods_data = company_goods.objects.filter(godown = godown_instance)
              
@@ -227,8 +217,6 @@ def update_inward(request, inward_id ):
                     test.total_bag = test.total_bag + int(bags)
                     test.save()
 
-                    print('1')
-
                 except stock.DoesNotExist:
                     stock.objects.create(company_goods = company_goods_instance, goods_company = goods_company_instance, total_bag =  int(bags))
 
@@ -277,8 +265,6 @@ def update_inward(request, inward_id ):
                             return redirect('list_inward')
 
                     else:
-
-                        print(data_inward.bags)
 
                         test.total_bag = test.total_bag + add_stock
                         test.save()
@@ -355,7 +341,6 @@ def delete_inward(request, inward_id):
 
 
     except:
-        print('something went wrong')
         return HttpResponseRedirect(reverse('list_inward_delete'))
 
 
@@ -366,10 +351,7 @@ def list_inward(request):
 
     year = request.GET.get('year')
     godown_id = request.session['gowdown']
-   
 
-    print(godown_id)
-    
     if godown_id == None:
         godown_instance = godown.objects.first()
         godown_id = godown_instance.id
@@ -386,9 +368,6 @@ def list_inward(request):
     else:
 
         data = inward.objects.filter(godown__id = godown_id).order_by("-id")
-
-        print(data)
-
 
     outward_filter_data = outward_filter(request.GET, queryset = data)
     
@@ -411,9 +390,9 @@ def list_inward(request):
 
             data1 = []
 
-            data1.append(i.godown)
-            data1.append(i.company_goods)
-            data1.append(i.goods_company)
+            data1.append(i.godown.name)
+            data1.append(i.company_goods.name)
+            data1.append(i.goods_company.goods_company_name)
             data1.append(i.DC_number)
             data1.append(i.bags)
             data1.append(i.DC_date) 
@@ -495,10 +474,6 @@ def add_outward(request):
         updated_request.update({'DC_date': date_time})
         forms = outward_Form(updated_request)
 
-        print(DC_date)
-
-
-
         if forms.is_valid():
 
             b = forms.cleaned_data['company_goods']
@@ -513,7 +488,6 @@ def add_outward(request):
 
                     test.total_bag = test.total_bag - e
                     test.save()
-                    print('save')
                     forms.save()
 
                     
@@ -521,13 +495,16 @@ def add_outward(request):
 
 
                 else:
-
+                    print('I am here')
                     messages.error(request, 'Outward is more than stock')
                     godown_instance = godown.objects.get(id = godown_id)
-
+                    company_goods_data = company_goods.objects.filter(godown = godown_instance)
+                    print(company_goods_data)
                     context = {
                         'form': forms,
-                        'godown_instance': godown_instance
+                        'godown_instance': godown_instance,
+                        'company_goods_data': company_goods_data
+
                     }
                     return render(request, 'transactions/add_outward.html', context)
 
@@ -555,13 +532,13 @@ def add_outward(request):
             godown_instance = godown.objects.get(id = godown_id)
             company_goods_data = company_goods.objects.filter(godown = godown_instance)
 
+
             context = {
                 'form': forms,
                 'godown_instance': godown_instance,
                 'company_goods_data': company_goods_data
 
             }
-            
             return render(request, 'transactions/add_outward.html', context)
 
 
@@ -637,6 +614,7 @@ def list_outward(request):
     data1.append('Godown')
     data1.append('Category')
     data1.append('Size')
+    data1.append('Dealer')
     data1.append('DC number')
     data1.append('Quantity')
     data1.append('Employee name')
@@ -651,9 +629,10 @@ def list_outward(request):
 
             data1 = []
 
-            data1.append(i.godown)
-            data1.append(i.company_goods)
-            data1.append(i.goods_company)
+            data1.append(i.godown.name)
+            data1.append(i.company_goods.name)
+            data1.append(i.goods_company.goods_company_name)
+            data1.append(i.dealer.name)
             data1.append(i.DC_number)
             data1.append(i.bags)
             data1.append(i.employee_name) 
@@ -696,9 +675,6 @@ def list_outward(request):
     except EmptyPage:
         data = paginator.page(paginator.num_pages)
 
-    print(data)
-
-
     context = {
         'data': outward_filter_data.qs,
         'year' : year,
@@ -718,12 +694,7 @@ def update_outward(request, outward_id):
     if request.method == 'POST':
 
         instance = outward.objects.get(id = outward_id)
-        print('before')
-        print(instance.goods_company)
-
-
-        print(request.POST)
-       
+      
         
         company_id = request.POST.get('company')
         company_goods_id = request.POST.get('company_goods')
@@ -750,18 +721,11 @@ def update_outward(request, outward_id):
         updated_request.update({'DC_date': date_time})
         forms = outward_Form(updated_request, instance=instance)
 
-        print('2')
-
         if forms.is_valid():
-
-            print('3')
 
             instance = outward.objects.get(id = outward_id)
 
             try:
-
-                print('testing ------------------------')
-
                 
                 if int(instance.company.id) != int(company_id) or int(instance.company_goods.id) != int(company_goods_id) or int(instance.goods_company.id) != int(goods_company_id):
 
@@ -779,9 +743,6 @@ def update_outward(request, outward_id):
 
                     if test.total_bag >= int(bags):
                         
-                        print('entered bags')
-                        
-                        print(test.total_bag, bags)
                         test.total_bag = test.total_bag - int(bags)
                         test.save()
 
@@ -796,12 +757,9 @@ def update_outward(request, outward_id):
 
                     else:
                         messages.error(request, "Outward is more than Stock")
-                        print('Outward is more than Stock')
                         return redirect('list_outward')
                     
                 else:
-
-                    print('wored')
 
                     if instance.bags != int(bags):
                         
@@ -821,13 +779,11 @@ def update_outward(request, outward_id):
 
                                 test.total_bag = test.total_bag - minus_stock
                                 test.save()
-                                print('save')
 
                                 forms.save()
                             else:
 
                                 messages.error(request, "Outward is more than Stock")
-                                print('Outward is more than Stock')
                                 return redirect('list_outward')
 
                         
@@ -835,7 +791,6 @@ def update_outward(request, outward_id):
 
                             test.total_bag = test.total_bag + add_stock
                             test.save()
-                            print('save')
 
                             forms.save()
 
@@ -856,7 +811,6 @@ def update_outward(request, outward_id):
 
         else:
            
-            print(forms.errors)
             comapnyID = forms.instance.company.id
             comapny_goods_ID = forms.instance.company_goods.id
             goods_company_ID = forms.instance.goods_company.id
@@ -898,7 +852,6 @@ def update_outward(request, outward_id):
 def delete_outward(request, outward_id):
 
     a = stock.objects.all()
-    print(a)
 
     try:
         con = outward.objects.get(id = outward_id)
@@ -912,7 +865,6 @@ def delete_outward(request, outward_id):
 
 
     except Exception as e:
-        print(e)
         return HttpResponseRedirect(reverse('list_outward_delete'))
 
 
@@ -935,10 +887,7 @@ def list_stock(request):
 
 
     company_goods_data = company_goods.objects.filter(godown__id = godown_id)
-    print('----------------')
 
-    print(godown_id)
-    print(company_goods_data)
     context = {
         'data': stock_filter_data.qs,
         'stock_filter_data' : stock_filter_data,
@@ -966,9 +915,6 @@ def add_return(request):
             date_time = datetime.now(IST)
 
 
-        print('-----------------------------------------------date_time')
-        print(date_time.date())
-        print(date.today())
         updated_request = request.POST.copy()
         updated_request.update({'DC_date': date_time})
         forms = supply_return_Form(updated_request)
@@ -976,7 +922,6 @@ def add_return(request):
         print(DC_date)
 
         if forms.is_valid():
-            print('save')
 
             forms.save()
 
@@ -1121,8 +1066,6 @@ def update_return(request, return_id):
                     stock_before.total_bag = stock_before.total_bag + instance.bags
                     stock_before.save()
 
-                    print('--------heheye----------')
-
                     forms.save()
 
                     return redirect('list_return')
@@ -1154,7 +1097,6 @@ def update_return(request, return_id):
                             else:
                                 
                                 messages.error(request, "Outward is more than Stock")
-                                print('Outward is more than Stock')
                                 return redirect('list_return')
 
                     
@@ -1178,8 +1120,6 @@ def update_return(request, return_id):
 
 
         else:
-
-            print('---------------------huhuhuh--')
 
             print(forms.errors)
 
@@ -1207,7 +1147,6 @@ def delete_return(request, return_id):
 
     try:
         con = supply_return.objects.get(id = return_id)
-        print(con)
         test = stock.objects.get(company = con.company, company_goods = con.company_goods, goods_company = con.goods_company)
         if test.total_bag >= con.bags:
             test.total_bag = test.total_bag - con.bags
@@ -1223,7 +1162,6 @@ def delete_return(request, return_id):
 
 
     except:
-        print('something went wrong')
         return HttpResponseRedirect(reverse('list_return'))
  
         
@@ -1325,13 +1263,10 @@ def report_outward(request):
     outward_filterd_data = outward_filter(request.GET, outward_data)
     outward_filterd_data = outward_filterd_data.qs
 
-    outward_filterd_data = list(outward_filterd_data.values_list('DC_number', 'company', 'company_goods__name', 'goods_company__goods_company_name', 'bags', 'DC_date'))
+    outward_filterd_data = list(outward_filterd_data.values_list('DC_number', 'company', 'company_goods__name', 'goods_company__goods_company_name', 'dealer__bane', 'bags', 'DC_date'))
     # print(out)
 
     outward_filterd_data = list(map(list, outward_filterd_data))
-
-    print('-------------------------------')
-    print(outward_filterd_data)
 
 
     vals1 = []
@@ -1340,6 +1275,7 @@ def report_outward(request):
     vals1.append("Company")
     vals1.append("Category")
     vals1.append("Size")
+    vals1.append("Dealer")
     vals1.append('Quantity')
     vals1.append('Date')
     vals.append(vals1)
@@ -1355,6 +1291,7 @@ def report_outward(request):
         vals1.append(i[3])
         vals1.append(i[4])
         vals1.append(i[5])
+        vals1.append(i[6])
         vals.append(vals1)
 
    
@@ -1419,7 +1356,6 @@ def report_supply_return(request):
     vals1.append('LR Number')
     vals1.append('Freight')
     vals.append(vals1)
-    print(vals)
 
     counteer = 1
 
@@ -1480,7 +1416,7 @@ def generate_report_stock(request):
         request.session["gowdown"] = godown_id
 
 
-    data_stock = stock.objects.filter(godown__id = godown_id)
+    data_stock = stock.objects.filter(godown__id = godown_id).order_by('updated_at')
 
     stock_filter_data = stock_filter(request.GET, queryset = data_stock)
     
@@ -1559,17 +1495,11 @@ def generate_report_main(request):
     outward_filterd_data = outward_filter(request.GET, outward_data)
     supply_return_filterd_data = outward_filter(request.GET, supply_return_data)
 
-    print('outward_data')
-    print(outward_data)
-    print('supply_return_data')
-    print(supply_return_data)
     if outward_data and not supply_return_data:
         
         # outward sum
         df2 = pd.DataFrame(list(outward_filterd_data.qs.values()))
         sum__ = df2.groupby(['company_id', 'company_goods_id', 'goods_company_id', 'agent_id']).sum().reset_index()
-        print('df2--------newwwww-----------')
-        print(sum__)
 
         sum__['bags_x'] = sum__['bags']
         sum__['bags_y'] = None
@@ -1589,8 +1519,6 @@ def generate_report_main(request):
         df3 = pd.DataFrame(list(supply_return_filterd_data.qs.values()))
 
         sum__2 = df3.groupby(['company_id', 'company_goods_id', 'goods_company_id', 'agent_id']).sum().reset_index()
-        print('df2--------newwwww-----------')
-        print(sum__2)
 
         sum__2['bags_x'] = None
         sum__2['bags_y'] = sum__2['bags']
@@ -1621,15 +1549,11 @@ def generate_report_main(request):
         final_ou['bags_z'] = final_ou.fillna(0)['bags_x'] - final_ou.fillna(0)['bags_y']
 
         
-        print('stock ')
-        print(final_ou)
         final_ou['company_id'] = final_ou['company_id'].map(company_data)
         final_ou['company_goods_id'] = final_ou['company_goods_id'].map(company_goods_data)
         final_ou['goods_company_id'] = final_ou['goods_company_id'].map(goods_company_data)
         final_ou['agent_id'] = final_ou['agent_id'].map(agent_data)
 
-        # print(final_ou)
-        # here
         out = (final_ou.merge(agent_data2, left_on='agent_id', right_on='name').reindex(columns=['company_id', 'agent_id', 'place', 'taluka', 'district', 'company_goods_id', 'goods_company_id', 'bags_x', 'bags_y', 'bags_z']))
 
         print(out)
@@ -1696,7 +1620,6 @@ def generate_report_main(request):
 def generate_report_daily(request):
 
     pd.set_option('display.float_format', '{:.2f}'.format)
-    print('--------------soukdgsbvhgdvei')
 
     #DC_date_start__date=2022-02-28&DC_date_end__date=2022-02-28
 
@@ -1714,7 +1637,6 @@ def generate_report_daily(request):
     supply_return_data = outward.objects.filter(DC_date = datetime.now())
     inward_filterd_data = inward_filter(request.GET, inward_data)
     outward_data_filterd_data = outward_filter(request.GET, outward_data)
-    print(inward_data)
     if inward_data:
         # inward sum
         df = pd.DataFrame(list(inward_filterd_data.qs.values()))
@@ -1741,15 +1663,11 @@ def generate_report_daily(request):
 
     #stock
     sum__4 = pd.DataFrame(list(stock.objects.all().values()))
-    print('stock')
-    print(sum__4)
 
     data_frames = [sum__, sum__2, sum__3, sum__4]
 
     ada = reduce(lambda  left,right: pd.merge(left,right,on=['company_id', 'company_goods_id', 'goods_company_id'], how='outer'), data_frames)[['company_id', 'company_goods_id', 'goods_company_id', 'bags_x', 'bags_y', 'bags', 'total_bag']]
     print('final')
-
-    print(ada)
 
    
 

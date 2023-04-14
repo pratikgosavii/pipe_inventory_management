@@ -49,6 +49,9 @@ class outward_Form(forms.ModelForm):
             'godown': forms.Select(attrs={
                 'class': 'form-control', 'id': 'godown'
             }),
+            'dealer': forms.Select(attrs={
+                'class': 'form-control', 'id': 'company'
+            }),
             'company_goods': forms.Select(attrs={
                 'class': 'form-control', 'id': 'company_goods'
             }),

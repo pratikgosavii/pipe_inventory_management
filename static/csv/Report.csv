@@ -1,4 +1,3 @@
-Godown,Category,Size,Dealer,DC number,Quantity,Employee name,Buyer name,Date
-asas,1,11,Demo,343434,0,,aewe,2023-04-14
-asas,1,11,Demo,0,0,,ptatik,2023-04-14
-asas,1,11,,12,12,,ptatik,2023-03-30
+Godown,Category,Size,DC number,Quantity,Date
+asas,1,11,567gh,678,2023-04-14
+asas,1,11,12,12,2023-03-30

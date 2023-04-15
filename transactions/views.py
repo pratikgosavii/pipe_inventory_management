@@ -808,13 +808,11 @@ def update_outward(request, outward_id):
 
         else:
            
-            comapnyID = forms.instance.company.id
             comapny_goods_ID = forms.instance.company_goods.id
             category_id = forms.instance.goods_company.id
           
             context = {
                 'form':  forms,
-                'comapnyID' : comapnyID,
                 'comapny_goods_ID' : comapny_goods_ID,
                 'category_ID' : category_id,
             }
@@ -832,7 +830,6 @@ def update_outward(request, outward_id):
           
         context = {
             'form':  forms,
-            'comapnyID' : comapnyID,
             'comapny_goods_ID' : comapny_goods_ID,
             'category_ID' : category_id,
         }

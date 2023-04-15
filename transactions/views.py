@@ -206,7 +206,7 @@ def update_inward(request, inward_id ):
 
             instance_inward = inward.objects.get(id = inward_id)
 
-            if int(instance_inward.company.id) != int(instance_inward.company_goods.id) != int(company_goods_id) or int(instance_inward.goods_company.id) != int(goods_company_id):
+            if int(instance_inward.company_goods.id) != int(company_goods_id) or int(instance_inward.goods_company.id) != int(goods_company_id):
 
                 try:
 
@@ -693,7 +693,6 @@ def update_outward(request, outward_id):
         instance = outward.objects.get(id = outward_id)
       
         
-        company_id = request.POST.get('company')
         company_goods_id = request.POST.get('company_goods')
         goods_company_id = request.POST.get('goods_company')
 
@@ -704,7 +703,9 @@ def update_outward(request, outward_id):
 
         DC_date = request.POST.get('DC_date')
 
-        date_time = numOfDays(DC_date)
+        print(DC_date)
+
+        
 
         if DC_date:
 
@@ -724,13 +725,13 @@ def update_outward(request, outward_id):
 
             try:
                 
-                if int(instance.company.id) != int(company_id) or int(instance.company_goods.id) != int(company_goods_id) or int(instance.goods_company.id) != int(goods_company_id):
+                if int(instance.company_goods.id) != int(company_goods_id) or int(instance.goods_company.id) != int(goods_company_id):
 
 
                     
                     try:
                       
-                        test = outward.objects.get(company_goods = company_goods_instance, goods_company = goods_company_instance)
+                        test = stock.objects.get(company_goods = company_goods_instance, goods_company = goods_company_instance)
                       
 
                     except stock.DoesNotExist:
@@ -743,7 +744,7 @@ def update_outward(request, outward_id):
                         test.total_bag = test.total_bag - int(bags)
                         test.save()
 
-                        stock_before = stock.objects.get(company = instance.company.id, company_goods = instance.company_goods.id, goods_company = instance.goods_company.id)
+                        stock_before = stock.objects.get(company_goods = instance.company_goods.id, goods_company = instance.goods_company.id)
                         
                         stock_before.total_bag = stock_before.total_bag + instance.bags
                         stock_before.save()

@@ -152,6 +152,36 @@
     });
 
 
+    $("#submitform").submit(function (event) {
+        event.preventDefault();  // Prevent the default form submission
+    
+        // Serialize the form data
+        let formData = $(this).serialize();
+    
+        $.ajax({
+            type: "POST",
+            url: '{% url "add_outward" %}',
+            data: formData,
+            success: function (data) {
+                if (data.status === 'Success') {
+                    alert('Outward entry added successfully.');
+                } else {
+                    alert('Error: ' + data.message);
+                    // Optionally, handle form errors
+                    if (data.errors) {
+                        console.log(data.errors);
+                        // Display errors to the user (implementation depends on your frontend)
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('An error occurred: ' + error);
+            }
+        });
+    });
+    
+
+
     
 </script>
 

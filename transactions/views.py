@@ -342,6 +342,30 @@ def delete_inward(request, inward_id):
 
 
 
+def delete_selected_inward(request):
+    
+    if request.method == 'POST':
+        selected_items = request.POST.getlist('selected_items')  # Get the list of selected outward IDs
+        
+        try:
+            for inward_id in selected_items:
+                con = inward.objects.get(id=inward_id)
+                test = stock.objects.get(godown=con.godown, company_goods=con.company_goods, goods_company=con.goods_company)
+                
+                # Adjust stock total before deleting inward
+                test.total_bag = test.total_bag - con.bags
+                test.save()
+                
+                # Delete the outward record
+                con.delete()
+            
+            return redirect(reverse('list_inward_delete'))  # Redirect after successful deletion
+        
+        except Exception as e:
+            return HttpResponse(f"Error occurred: {e}", status=400)
+    
+    return HttpResponse("Invalid request", status=400)
+
 
 @login_required(login_url='login')
 def list_inward(request):
@@ -441,105 +465,64 @@ import json
 
 @login_required(login_url='login')
 def add_outward(request):
-
-
     godown_id = request.session.get('gowdown')
-     
-    if godown_id == None:
+
+    if godown_id is None:
         godown_instance = godown.objects.first()
         godown_id = godown_instance.id
         request.session["gowdown"] = godown_id
-    
     else:
-        godown_instance = godown.objects.get(id = godown_id)
-
+        godown_instance = godown.objects.get(id=godown_id)
 
     if request.method == 'POST':
-
         forms = outward_Form(request.POST)
         DC_date = request.POST.get('DC_date')
 
-
         if DC_date:
-
             date_time = DC_date
         else:
             date_time = datetime.now(IST)
-
 
         updated_request = request.POST.copy()
         updated_request.update({'DC_date': date_time})
         forms = outward_Form(updated_request)
 
         if forms.is_valid():
-
             b = forms.cleaned_data['company_goods']
             c = forms.cleaned_data['goods_company']
             e = forms.cleaned_data['bags']
             g = forms.cleaned_data['godown']
 
             try:
-                test = stock.objects.get(godown = g, company_goods = b, goods_company = c)
+                test = stock.objects.get(godown=g, company_goods=b, goods_company=c)
 
                 if test.total_bag >= e:
-
-                    test.total_bag = test.total_bag - e
+                    test.total_bag -= e
                     test.save()
                     forms.save()
-
-                    
-                    return redirect('add_outward')
-
-
+                    return JsonResponse({'status': 'Success'})
                 else:
-                    print('I am here')
-                    messages.error(request, 'Outward is more than stock')
-                    godown_instance = godown.objects.get(id = godown_id)
-                    company_goods_data = company_goods.objects.filter(godown = godown_instance)
-                    print(company_goods_data)
-                    context = {
-                        'form': forms,
-                        'godown_instance': godown_instance,
-                        'company_goods_data': company_goods_data
-
-                    }
-                    return render(request, 'transactions/add_outward.html', context)
-
-
+                    return JsonResponse({
+                        'status': 'error', 
+                        'message': 'Outward is more than stock'
+                    })
 
             except stock.DoesNotExist:
-               
-                messages.error(request,"no stock in inverntory")
-                godown_instance = godown.objects.get(id = godown_id)
-                company_goods_data = company_goods.objects.filter(godown = godown_instance)
-
-                context = {
-                    'form': forms,
-                    'godown_instance': godown_instance,
-                    'company_goods_data': company_goods_data
-
-                }
-               
-                return render(request, 'transactions/add_outward.html', context)
-
+                return JsonResponse({
+                    'status': 'error', 
+                    'message': 'No stock in inventory'
+                })
 
         else:
+            # Capture and return form errors
+            form_errors = forms.errors.as_json()
+            return JsonResponse({
+                'status': 'error', 
+                'message': 'Form validation failed',
+                'errors': form_errors
+            })
 
-            
-            godown_instance = godown.objects.get(id = godown_id)
-            company_goods_data = company_goods.objects.filter(godown = godown_instance)
-
-
-            context = {
-                'form': forms,
-                'godown_instance': godown_instance,
-                'company_goods_data': company_goods_data
-
-            }
-            return render(request, 'transactions/add_outward.html', context)
-
-
-
+    
 
     else:
 
@@ -856,6 +839,30 @@ def delete_outward(request, outward_id):
 
     except Exception as e:
         return HttpResponseRedirect(reverse('list_outward_delete'))
+
+@login_required(login_url='login')
+def delete_selected_outward(request):
+    if request.method == 'POST':
+        selected_items = request.POST.getlist('selected_items')  # Get the list of selected outward IDs
+        
+        try:
+            for outward_id in selected_items:
+                con = outward.objects.get(id=outward_id)
+                test = stock.objects.get(godown=con.godown, company_goods=con.company_goods, goods_company=con.goods_company)
+                
+                # Adjust stock total before deleting outward
+                test.total_bag = test.total_bag + con.bags
+                test.save()
+                
+                # Delete the outward record
+                con.delete()
+            
+            return redirect(reverse('list_outward_delete'))  # Redirect after successful deletion
+        
+        except Exception as e:
+            return HttpResponse(f"Error occurred: {e}", status=400)
+    
+    return HttpResponse("Invalid request", status=400)
 
 
 from .filters import *
@@ -1772,12 +1779,23 @@ def list_outward_delete(request):
     data = outward.objects.all()
 
 
+    page = request.GET.get('page', 1)
+    paginator = Paginator(data, 50)
+
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        data = paginator.page(1)
+    except EmptyPage:
+        data = paginator.page(paginator.num_pages)
 
     context = {
         'data': data,
     }
 
     return render(request, 'delete/list_outward_delete.html', context)
+
+
 
 def list_return_delete(request):
 

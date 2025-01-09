@@ -40,7 +40,9 @@ urlpatterns = [
     path('list-return-delete/', list_return_delete, name='list_return_delete'),
 
     path('delete-inward/<inward_id>', delete_inward, name='delete_inward'),
+    path('delete-inward-selected/', delete_selected_inward, name='delete_selected_inward'),
     path('delete-outward/<outward_id>', delete_outward, name='delete_outward'),
+    path('delete-outward-selected/', delete_selected_outward, name='delete_selected_outward'),
     path('delete-return/<return_id>', delete_return, name='delete_return'),
 
 

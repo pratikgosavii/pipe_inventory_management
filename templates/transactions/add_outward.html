@@ -155,6 +155,10 @@
     $("#submitform").submit(function (event) {
         event.preventDefault();  // Prevent the default form submission
     
+        let submitButton = $(this).find(':submit');
+        submitButton.prop('disabled', true);
+
+        
         // Serialize the form data
         let formData = $(this).serialize();
     
@@ -164,8 +168,10 @@
             data: formData,
             success: function (data) {
                 if (data.status === 'Success') {
+                    submitButton.prop('disabled', false);
                     alert('Outward entry added successfully.');
                 } else {
+                    submitButton.prop('disabled', false);
                     alert('Error: ' + data.message);
                     // Optionally, handle form errors
                     if (data.errors) {
@@ -176,6 +182,8 @@
             },
             error: function (xhr, status, error) {
                 alert('An error occurred: ' + error);
+                submitButton.prop('disabled', false);
+            
             }
         });
     });

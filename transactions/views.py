@@ -346,6 +346,8 @@ def delete_selected_inward(request):
     
     if request.method == 'POST':
         selected_items = request.POST.getlist('selected_items')  # Get the list of selected outward IDs
+
+        print(selected_items)
         
         try:
             for inward_id in selected_items:
@@ -1766,10 +1768,20 @@ def list_inward_delete(request):
 
     data = inward.objects.all()
 
+    page = request.GET.get('page', 1)
+    paginator = Paginator(data, 50)
+
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        data = paginator.page(1)
+    except EmptyPage:
+        data = paginator.page(paginator.num_pages)
 
     context = {
         'data': data,
     }
+
 
     return render(request, 'delete/list_inward_delete.html', context)
 

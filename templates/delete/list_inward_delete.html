@@ -44,109 +44,128 @@
     </div>
 </div>
 
-<!-- Multi-Select and Pagination -->
-<form method="POST" action="{% url 'delete_selected_inward' %}">
-    {% csrf_token %}
-    <div class="table-stats order-table ov-h">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="serial">
-                        <input type="checkbox" id="select-all" />
-                    </th>
-                    <th>Category</th>
-                    <th>Size</th>
-                    <th>Party</th>
-                    <th>Total Quantity</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if data %}
-                    {% for i in data %}
-                        <tr>
-                            <td class="serial">
-                                <input type="checkbox" name="selected_inwards" value="{{ i.id }}" class="select-row" />
-                            </td>
-                            <td>{{ i.company_goods.name }}</td>
-                            <td>{{ i.goods_company.goods_company_name }}</td>
-                            <td>{{ i.agent.name }}</td>
-                            <td>{{ i.bags }}</td>
-                            <td>
-                                <a href="{% url 'update_inward' i.id %}">
-                                    <button id="payment-button" style="background-color: green; border: green; padding: 10px; border-radius: 12px;" type="submit" class="btn-info">
-                                        <span id="payment-button-amount">View</span>
-                                    </button>
-                                </a>
-                                <a href="{% url 'delete_inward' i.id %}">
-                                    <button id="delete_compnay-button" style="background-color: red; border: red; padding: 10px; border-radius: 12px;" type="submit" class="btn-info">
-                                        <span id="payment-button-amount">Delete</span>
-                                    </button>
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% else %}
-                    <tr><td>No Product Data</td></tr>
-                {% endif %}
-            </tbody>
-        </table>
-    </div>
 
-    <!-- Button for deleting selected rows -->
-    <div class="form-group" style="text-align: right;">
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete the selected records?')">
-            Delete Selected
-        </button>
-    </div>
-</form>
 
-<!-- Pagination -->
-{% if data.has_other_pages %}
-    <nav>
-        <ul class="pagination justify-content-center">
-            {% if data.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ data.previous_page_number }}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link" aria-hidden="true">&laquo;</span>
-                </li>
-            {% endif %}
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="box-title">Inward List </h4>
+            </div>
+            <div class="card-body--">
+                <div class="table-stats order-table ov-h">
 
-            {% for p in data.paginator.page_range %}
-                {% if p >= data.number|add:-5 and p <= data.number|add:5 %}
-                    {% if data.number == p %}
-                        <li class="page-item"><a class="page-link" style="color: red;" href="#">{{ p }}</a></li>
-                    {% else %}
-                        <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                    <!-- Multi-Select and Pagination -->
+                    <form method="POST" action="{% url 'delete_selected_inward' %}">
+                        {% csrf_token %}
+
+                        <button class="btn btn-danger" type="submit" id="delete-selected-button" style="margin-bottom: 15px;">Delete Selected</button>
+                        
+                        <div class="table-stats order-table ov-h">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="serial">
+                                            <input type="checkbox" id="select-all" />
+                                        </th>
+                                        <th>Category</th>
+                                        <th>Size</th>
+                                        <th>Party</th>
+                                        <th>Total Quantity</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if data %}
+                                        {% for i in data %}
+                                            <tr>
+                                                <td class="serial">
+                                                    <input type="checkbox" name="selected_items" value="{{ i.id }}">
+                                                </td>
+                                                <td>{{ i.company_goods.name }}</td>
+                                                <td>{{ i.goods_company.goods_company_name }}</td>
+                                                <td>{{ i.agent.name }}</td>
+                                                <td>{{ i.bags }}</td>
+                                                <td>
+                                                    <a href="{% url 'update_inward' i.id %}">
+                                                        <button id="payment-button" style="background-color: green; border: green; padding: 10px; border-radius: 12px;" type="submit" class="btn-info">
+                                                            <span id="payment-button-amount">View</span>
+                                                        </button>
+                                                    </a>
+                                                    <a href="{% url 'delete_inward' i.id %}">
+                                                        <button id="delete_compnay-button" style="background-color: red; border: red; padding: 10px; border-radius: 12px;" type="submit" class="btn-info">
+                                                            <span id="payment-button-amount">Delete</span>
+                                                        </button>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr><td>No Product Data</td></tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Button for deleting selected rows -->
+                       
+                    </form>
+
+                    <!-- Pagination -->
+                    {% if data.has_other_pages %}
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                {% if data.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ data.previous_page_number }}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link" aria-hidden="true">&laquo;</span>
+                                    </li>
+                                {% endif %}
+
+                                {% for p in data.paginator.page_range %}
+                                    {% if p >= data.number|add:-5 and p <= data.number|add:5 %}
+                                        {% if data.number == p %}
+                                            <li class="page-item"><a class="page-link" style="color: red;" href="#">{{ p }}</a></li>
+                                        {% else %}
+                                            <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if data.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ data.next_page_number }}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link" aria-hidden="true">&raquo;</span>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
                     {% endif %}
-                {% endif %}
-            {% endfor %}
 
-            {% if data.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ data.next_page_number }}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link" aria-hidden="true">&raquo;</span>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
-{% endif %}
+
+                </div> <!-- /.table-stats -->
+            </div>
+        </div> <!-- /.card -->
+    </div> <!-- /.col-lg-8 -->
+</div>
+
+
 
 <script>
     // Select all checkboxes functionality
     document.getElementById('select-all').addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('.select-row');
-        checkboxes.forEach(function(checkbox) {
+        const checkboxes = document.querySelectorAll('input[name="selected_items"]');
+        checkboxes.forEach(checkbox => {
             checkbox.checked = this.checked;
         });
     });
